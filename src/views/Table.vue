@@ -21,9 +21,16 @@
                 <order-item @qchanged="changeQuantity" :item="orderItem"></order-item>
               </b-col>
             </b-row>
-            <b-button @click="placeOrder" class="mt-3" v-if="orderItems.length != 0" variant="primary" block>
-Place the order
-            </b-button>
+            <b-button
+              @click="placeOrder"
+              class="mt-3"
+              v-if="orderItems.length != 0"
+              variant="primary"
+              block
+            >Place the order</b-button>
+            <span v-if="!orderItems.length <= 0">
+              <b>Total: £{{ totalPrice }}</b>
+            </span>
           </b-tab>
         </b-tabs>
       </b-col>
@@ -32,58 +39,80 @@ Place the order
 </template>
 
 <script>
-import {db, Timestamp} from '../db'
+import { db, Timestamp } from "../db";
 export default {
   data: function () {
     return {
-      menuItems: [
-       
-      ],
+      menuItems: [],
       orderItems: [],
     };
+  },
+  computed: {
+    totalPrice: () => {
+      return 123
+    },
   },
   methods: {
     itemAdded(payload) {
       console.log(payload);
-      let item = this.orderItems.find(el=>el.item.id==payload.id)
-      if(item){
-        item.quantity++
-        return
+      let item = this.orderItems.find((el) => el.item.id == payload.id);
+      if (item) {
+        item.quantity++;
+        return;
       }
-      
+
       this.orderItems.push({
         item: payload,
         quantity: 1,
       });
     },
-    changeQuantity(payload){
-      const orderItem = Object.assign({},this.orderItems.find(el=>el.item.id==payload.item.id))
-      if(orderItem.quantity+payload.change <= 0){
+    changeQuantity(payload) {
+      const orderItem = Object.assign(
+        {},
+        this.orderItems.find((el) => el.item.id == payload.item.id)
+      );
+      if (orderItem.quantity + payload.change <= 0) {
         console.log("item has to be deleted");
-        //let index = this.orderItems.indexOf(orderItem)
-        //this.orderItems.splice(index,1)
-        return
+        let newItems = [];
+        this.orderItems.forEach((el) => {
+          if (orderItem.item.id != el.item.id) {
+            newItems.push(el);
+          }
+        });
+        this.orderItems = newItems;
+        return;
       }
-      this.orderItems.find(el=>el.item.id==payload.item.id).quantity+=payload.change
+      this.orderItems.find((el) => el.item.id == payload.item.id).quantity +=
+        payload.change;
     },
-    async placeOrder(){
-        // Add order to database
-        const ref = await db.collection("orders").add({
-            items: this.orderItems,
-            time: Timestamp.fromDate(new Date()),
-            status: "added",
-            foodstatus: "added",
-            drinkstatus: "added",
-        })
-        ref.get().then(snap=>{
-            this.$router.push("/waiting/"+snap.id)
-        })
-        
-    }
-
+    async placeOrder() {
+      // check if theres only food or only drinks
+      let nofood = true;
+      let nodrinks = true;
+      this.orderItems.forEach((el) => {
+        console.log(el);
+        if (el.item.type == "food") {
+          nofood = false;
+        }
+        if (el.item.type == "drink") {
+          nodrinks = false;
+        }
+      });
+      // Add order to database
+      const ref = await db.collection("orders").add({
+        items: this.orderItems,
+        time: Timestamp.fromDate(new Date()),
+        status: "added",
+        foodstatus: nofood ? "done" : "added",
+        drinkstatus: nodrinks ? "done" : "added",
+      });
+      ref.get().then((snap) => {
+        this.$router.push("/waiting/" + snap.id);
+      });
+    },
   },
   firestore: {
-    menuItems: db.collection('items'),
+    menuItems: db.collection("items"),
   },
 };
 </script>

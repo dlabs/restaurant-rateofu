@@ -35,6 +35,8 @@ export default {
     onSubmit(e) {
       e.preventDefault();
       console.log(this.form);
+      window.localStorage.setItem("username",this.form.name)
+      window.localStorage.setItem("role",this.form.role)
       switch (this.form.role) {
         case "chef":
             this.$router.push("/staff/chef")

@@ -11,7 +11,7 @@
         <b-card-text>{{ item.description || "" }}</b-card-text>
 
         <b-button @click="addToMenu" variant="success">Add to order</b-button>
-        <span class="price ml-2"><b>{{ item.price }}</b></span>
+        <span class="price ml-2"><b>£{{ item.price }}</b></span>
       </b-card>
 </template>
 
