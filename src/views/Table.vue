@@ -54,7 +54,6 @@ export default {
   },
   methods: {
     itemAdded(payload) {
-      console.log(payload);
       let item = this.orderItems.find((el) => el.item.id == payload.id);
       if (item) {
         item.quantity++;
