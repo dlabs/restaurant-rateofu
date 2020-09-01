@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-card>
+    <b-card class="align">
       <h3>{{ item.item.title }}</h3>
       <span>
         Amount: <b>{{ item.quantity }}x</b>
@@ -30,5 +30,8 @@ export default {
 <style>
 .buttons-container {
   display: inline;
+}
+.align{
+  text-align: center;
 }
 </style>

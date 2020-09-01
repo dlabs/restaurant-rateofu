@@ -6,6 +6,11 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 import MenuItem from "./components/menu/MenuItem.vue"
 import OrderItem from "./components/order/OrderItem.vue"
+import router from './router'
+
+import { firestorePlugin } from 'vuefire'
+
+Vue.use(firestorePlugin)
 
 // Install BootstrapVue
 Vue.use(BootstrapVue)
@@ -15,8 +20,10 @@ Vue.use(IconsPlugin)
 Vue.component('menu-item', MenuItem)
 Vue.component('order-item', OrderItem)
 
+
 Vue.config.productionTip = false
 
 new Vue({
-  render: h => h(App),
+  router,
+  render: h => h(App)
 }).$mount('#app')
