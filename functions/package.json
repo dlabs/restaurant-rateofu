@@ -1,0 +1,21 @@
+{
+  "name": "restaurant-rateofu-functions",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "firebase-admin": "^9.1.1",
+    "firebase-functions": "^3.11.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.9.0",
+    "@babel/core": "^7.9.0"
+  },
+  "main": "dist/index.js",
+  "module": "src/index.js",
+  "scripts": {
+    "watch": "babel src --out-dir dist --source-maps --copy-files --watch"
+  },
+  "engines": {
+    "node": "10"
+  }
+}
