@@ -13,12 +13,12 @@ class CreateRestaurantMealsTable extends Migration
      */
     public function up()
     {
-        Schema::create('restaurant_meals', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
+        Schema::create("restaurant_meals", function (Blueprint $table) {
+            $table->increments("id");
+            $table->string("name");
+            $table->string("description")->nullable();
             $table->enum("type", ["food", "drink"]);
             $table->string("price");
-            $table->boolean("prepared");
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ class CreateRestaurantMealsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('restaurant_meals');
+        Schema::dropIfExists("restaurant_meals");
     }
 }
