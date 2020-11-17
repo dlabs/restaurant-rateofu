@@ -31,8 +31,8 @@
 <div class="col-sm-12 hidden customer-order-summary">
   <input type="number" id="order_id" data-id="" hidden>
   <h2>Order summary:</h2>
-  <h2>Your order id: <span id="order_id_h2"></span></h2>
-  <h2>Your order status: <span id="order_status_h2"></span></h2>
+  <h2 class="hidden">Your order id: <span id="order_id_h2"></span></h2>
+  <h2 class="hidden">Your order status: <span id="order_status_h2"></span></h2>
   <div id="customer-order">
     <div class="container">
       <div class="row">

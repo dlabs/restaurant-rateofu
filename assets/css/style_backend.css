@@ -1,0 +1,40 @@
+html {
+	box-sizing: border-box;
+	scroll-behavior: smooth;
+}
+
+*,
+*:before,
+*:after {
+	box-sizing: inherit;
+}
+a {
+	text-decoration: none;
+	color: #000;
+}
+
+h1 {
+	font-size: 34px;
+	text-align: center;
+	padding: 20px;
+}
+h2 {
+	font-size: 28px;
+	text-align: center;
+	padding: 20px;
+}
+
+/*
+  Admin area
+*/
+.staff-login {
+	display: flex;
+	gap: 20px;
+	justify-content: center;
+	align-items: center;
+}
+
+.staff-login .btn {
+	margin-top: 0;
+	width: 50%;
+}
