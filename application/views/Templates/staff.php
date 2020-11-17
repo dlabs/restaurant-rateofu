@@ -7,24 +7,27 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
     integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
   <link rel="stylesheet" href="<?= base_url(); ?>assets/css/style.css">
-  <title>Restaurant at the End of the Universe</title>
+  <title>Staff</title>
 </head>
 
 <body>
   <div class="container" id="app">
     <div class="row">
       <div class="col-sm-12">
-        <h1>The Restaurant at the End of the Universe</h1>
-        <img src="https://allears.net/wp-content/uploads/2019/08/Space-Restaurant-Concept-Art.jpg" alt="">
-        <h2>Our Menu</h2>
+        <h1>Staff area</h1>
+        <?php
+        if (isset($staff)) {
+          echo '
+          <h2>You are <b>' . $staff . '</b></h2>
+          <a href="' . base_url() . 'staff/logout">Logout</a>
+          ';
+        }
+        ?>
       </div>
-    </div>
-    <div class="row">
       <div class="col-sm-12">
         <?php $this->load->view($main); ?>
       </div>
     </div>
-  </div>
   </div>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
