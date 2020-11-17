@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container container-index">
   <div class="row">
     <?php
     foreach ($menu as $key => $item) {

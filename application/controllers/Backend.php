@@ -33,14 +33,14 @@ function prettify_customer_status($order)
 {
   switch ($order) {
     case 'order_recieved':
-      return "Order was recieved";
+      return "Order was recieved.";
     case 'drinks_proccessed':
       return "Barman prepared your drinks.";
     case 'ready_to_serve':
-      return "Chef prepared your food";
+      return "Chef prepared your food.";
     case 'served':
-      return "Watch out, waiter is bringing your order";
+      return "Watch out, waiter is bringing your order.";
     default:
-      return "There was an error";
+      return "There was an error.";
   }
 }

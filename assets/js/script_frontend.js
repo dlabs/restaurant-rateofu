@@ -87,7 +87,7 @@ $(document).ready(function () {
           $('#order_id').data('id', response);
           $('h2').removeClass('hidden');
           $('#submit-order').remove();
-          $('#order_status_h2').html('<h1>Order was recieved</h1>')
+          $('#order_status_h2').html('<h1>Order was recieved.</h1>')
           // Every 3 seconds sends request to check for order change.
           window.setInterval(function(){
             checkOrderStatus(response);
