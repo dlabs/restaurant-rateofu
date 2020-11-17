@@ -1,0 +1,24 @@
+<IfModule mod_headers.c>
+    <FilesMatch "\.(eot|otf|ttc|ttf|woff|woff2)$">
+        Header set Access-Control-Allow-Origin "*"
+    </FilesMatch>
+</IfModule>
+Options +FollowSymLinks
+Options -Indexes
+DirectoryIndex index.php
+RewriteEngine on
+RewriteCond $1 !^(index\.php|assets|images|css|js|install|robots\.txt|favicon\.ico)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{HTTP_HOST} ^denisciglaric.info [NC]
+RewriteRule ^(.*)$ index.php?/$1 [L,QSA]
+<FilesMatch "\.(html|htm|js|css)$">
+  FileETag None
+  <IfModule mod_headers.c>
+    Header unset ETag
+    Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires "Wed, 12 Jan 1980 05:00:00 GMT"
+  </IfModule>
+</FilesMatch>
+

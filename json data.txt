@@ -1,0 +1,113 @@
+{
+	"1": [{
+		"image": "https://apartmajimartin.si/assets/hotel/images/s_apartma1.jpg"
+  }],
+	"2": [{
+		"image": "https://apartmajimartin.si/assets/hotel/images/s_apartma2.jpg"
+  }],
+  "3": [{
+  "image": "https://apartmajimartin.si/assets/hotel/images/s_apartma3.jpg"
+  }],
+  "4": [{
+  "image": "https://apartmajimartin.si/assets/hotel/images/s_apartma4.jpg"
+  }]
+}
+
+{
+	"1": [{
+		"image": "https://apartmajimartin.si/assets/hotel/images/c_apartma1.jpg"
+  }],
+	"2": [{
+		"image": "https://apartmajimartin.si/assets/hotel/images/c_apartma2.jpg"
+  }],
+  "3": [{
+  "image": "https://apartmajimartin.si/assets/hotel/images/c_apartma3.jpg"
+  }],
+  "4": [{
+  "image": "https://apartmajimartin.si/assets/hotel/images/c_apartma4.jpg"
+  }]
+}
+
+{
+	"1": [{
+		"image": "https://apartmajimartin.si/assets/hotel/images/1-01.jpg"
+  }],
+	"2": [{
+		"image": "https://apartmajimartin.si/assets/hotel/images/1-03.jpg"
+  }],
+  "3": [{
+  "image": "https://apartmajimartin.si/assets/hotel/images/1-04.jpg"
+  }],
+  "4": [{
+  "image": "https://apartmajimartin.si/assets/hotel/images/1-05.jpg"
+  }],
+  "5": [{
+  "image": "https://apartmajimartin.si/assets/hotel/images/1-06.jpg"
+  }],
+  "6": [{
+  "image": "https://apartmajimartin.si/assets/hotel/images/1-07.jpg"
+  }],
+  "7": [{
+  "image": "https://apartmajimartin.si/assets/hotel/images/1-08.jpg"
+  }],
+  "8": [{
+  "image": "https://apartmajimartin.si/assets/hotel/images/1-09.jpg"
+  }],
+  "9": [{
+  "image": "https://apartmajimartin.si/assets/hotel/images/1-0010.jpg"
+  }],
+  "10": [{
+  "image": "https://apartmajimartin.si/assets/hotel/images/1-023.jpg"
+  }],
+  "11": [{
+  "image": "https://apartmajimartin.si/assets/hotel/images/1-0256.jpg"
+  }]
+}
+
+{
+	"1": [{
+		"image": "https://apartmajimartin.si/assets/hotel/images/2_01.jpg"
+  }],
+	"2": [{
+		"image": "https://apartmajimartin.si/assets/hotel/images/2_002.jpg"
+  }],
+	"3": [{
+		"image": "https://apartmajimartin.si/assets/hotel/images/2_0003.jpg"
+  }],
+	"4": [{
+		"image": "https://apartmajimartin.si/assets/hotel/images/2_03.jpg"
+  }],
+	"5": [{
+		"image": "https://apartmajimartin.si/assets/hotel/images/2_004.jpg"
+  }],
+	"6": [{
+		"image": "https://apartmajimartin.si/assets/hotel/images/2_04.jpg"
+  }],
+	"7": [{
+		"image": "https://apartmajimartin.si/assets/hotel/images/2_05.jpg"
+  }],
+	"8": [{
+		"image": "https://apartmajimartin.si/assets/hotel/images/2_006.jpg"
+  }],
+	"9": [{
+		"image": "https://apartmajimartin.si/assets/hotel/images/2_007.jpg"
+  }],
+	"10": [{
+		"image": "https://apartmajimartin.si/assets/hotel/images/2_008.jpg"
+  }],
+	"11": [{
+		"image": "https://apartmajimartin.si/assets/hotel/images/2_023.jpg"
+  }],
+	"12": [{
+		"image": "https://apartmajimartin.si/assets/hotel/images/2_026.jpg"
+  }],
+	"13": [{
+		"image": "https://apartmajimartin.si/assets/hotel/images/2_0052.jpg"
+  }],
+	"14": [{
+		"image": "https://apartmajimartin.si/assets/hotel/images/2_056.jpg"
+  }],
+	"15": [{
+		"image": "https://apartmajimartin.si/assets/hotel/images/2_v005.jpg"
+  }]	
+}
