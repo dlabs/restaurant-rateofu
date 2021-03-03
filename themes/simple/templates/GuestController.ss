@@ -44,8 +44,26 @@
                 <h2>Order list</h2>
                 <div id="order-list">
                     <div v-for="order in orders_list">
-                        <p>{{ order.id }} <span class="order-status">{{ order.status }}</span></p>
-                        <p class="order-details-{{ order.id }}" style="display: none;">{{ order.items }}</p>
+                        <div>
+                            <p class="order-list-item">{{ order.id }}
+                            <template v-if="order.drinks_ready == '1' && order.drinks_served == '0'">
+                                <span class="pill pill-rnd">Drinks prepared</span>
+                            </template>
+                            <template v-if="order.drinks_served == '1'">
+                                <span class="pill pill-rnd">Drinks served</span>
+                            </template>
+                            <template v-if="order.food_ready == '1' && order.food_served == '0'">
+                                <span class="pill pill-rnd">Food prepared</span>
+                            </template>
+                            <template v-if="order.food_served == '1'">
+                                <span class="pill pill-rnd">Food served</span>
+                            </template>
+
+                            <span class="order-status">{{ order.status }}</span>
+
+                            </p>
+                        </div>
+                        <p :class="'order_details_' + order.id" style="display: none;">{{ order.items }}</p>
                     </div>
                 </div>
             </div>
@@ -66,13 +84,13 @@
             }
         },
         mounted() {
-            fetch('guest/get_menu_items')
+            fetch('guest/menu_items')
             .then(res => res.json())
             .then(myJson => {
                 this.menu_items = myJson
             })
         },
-        methods: {
+        methods: { 
             submit_order: function () {
                 var order_items = [];
 
@@ -84,7 +102,14 @@
                 }
 
                 if (order_items.length) {
-                    axios.post('guest/submit_order', JSON.stringify(order_items))
+                    axios.post('guest/orders', JSON.stringify(order_items))
+                    .then(function (response) {
+                        v_orders_list.fetch_orders();
+
+                        for (i = 0; i < inputs.length; i++) {
+                            inputs[i].value = '0';
+                        }
+                    })
                     .catch(function (error) {
                         console.log(error);
                     });
@@ -104,7 +129,7 @@
         },
         methods: {
             fetch_orders: function () {
-                fetch('guest/get_orders')
+                fetch('guest/orders')
                 .then(res => res.json())
                 .then(myJson => {
                     this.orders_list = myJson
@@ -116,12 +141,18 @@
 
             this.interval = setInterval(function () {
                 this.fetch_orders();
-            }.bind(this), 10000);
+            }.bind(this), 5000);
         },
         beforeDestroy: function() {
             clearInterval(this.interval);
         }
     });
 </script>
-
+<style>
+    .order-list-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+</style>
 </html>
