@@ -32,11 +32,11 @@
             <div id="order-form">
                 <div v-for="menu_item in menu_items" class="menu-item mb-3">
                     <label :for="'order_item_' + menu_item.id" class="name form-label">{{ menu_item.name }}</label>
-                    <input :id="'order_item_' + menu_item.id" type="number" class="form-control" min="0" step="1" value="0" :data-menu-item="menu_item.id">
+                    <input :id="'order_item_' + menu_item.id" type="number" class="form-control menu-item-qty" min="0" step="1" value="0" :data-menu-item="menu_item.id">
                     <label :for="'order_item_' + menu_item.id" class="price form-label"><span>{{ menu_item.price }}</span> <span>{{ menu_item.currency }}</span></label>
                 </div>
 
-                <button v-on:click="submit_order()">Send</button>
+                <button v-on:click="submit_order()">Submit order</button>
             </div>
         </div>
 

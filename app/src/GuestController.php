@@ -15,7 +15,6 @@ namespace {
         private static $allowed_actions = [
             "menu_items",
             "orders",
-            "submit_order",
         ];
 
         private function get_table_id()
@@ -78,15 +77,15 @@ namespace {
             return json_encode($to_return);
         }
 
-        private function getAllorders($table_id)
+        private function getAllOrders($table_id)
         {
             $to_return = [];
 
             if ($table_id && trim($table_id) !== "") {
-                $orders = Order::get()->filter(["TableID" => $table_id]);
+                $orders = Order::get()->filter(["TableID" => $table_id])->sort(["Created" => "DESC"]);
                 if ($orders && $orders->exists()) {
                     foreach ($orders as $order) {
-                        $to_return[$order->ID] = [
+                        $to_return[] = [
                             "id" => $order->OrderID,
                             "items" => json_encode($order->Items()->map("Name", "Quantity")->toArray()),
                             "drinks_ready" => $order->DrinksReady,

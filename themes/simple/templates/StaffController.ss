@@ -24,7 +24,7 @@
 <body>
     <div class="container">
         <div class="row">
-            <div class="d-flex justify-content-evenly">
+            <div class="d-flex justify-content-between">
                 <% if $getRole %>
                     <div class="mb-3 mt-5">
                         <h1>$getRole</h1>
@@ -56,13 +56,11 @@
 
             <% if $getRole %>
                 <div class="row mt-5">
-                    <div class="d-flex justify-content-center">
-                        <h2>Order list</h2>
-                        <div id="order-list">
-                            <div v-for="order in orders_list">
-                                <p>{{ order.id }} <span class="order-status">{{ order.status }}</span></p>
-                                <button v-on:click="process_order(order.id)">Send</button>
-                            </div>
+                    <h2>Order list</h2>
+                    <div id="order-list">
+                        <div v-for="order in orders_list" class="order-list-item">
+                            <p>{{ order.id }} <span class="order-status">{{ order.status }}</span></p>
+                            <button v-on:click="process_order(order.id)">Send</button>
                         </div>
                     </div>
                 </div>
@@ -119,6 +117,15 @@
 <style>
     form {
         margin-top: 25%;
+    }
+
+    .order-list-item {
+        display: flex;
+        align-items: center;
+    }
+
+    .order-list-item span {
+        margin: 0 20px 0 14px;
     }
 </style>
 </html>
