@@ -1,0 +1,27 @@
+version: '3'
+services:
+  web:
+    image: msdeploybot/silverstripe-web
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+    ports:
+      - 8888:80
+    links:
+      - db
+
+  db:
+    image: mysql:5.7
+    volumes:
+      - mysqldb:/var/lib/mysql
+    restart: always
+    ports:
+      - "3307:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=development
+      - MYSQL_USER=test
+      - MYSQL_PASSWORD=test
+
+volumes:
+  mysqldb:
