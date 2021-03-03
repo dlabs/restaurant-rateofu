@@ -1,0 +1,8 @@
+---
+Name: approutes
+After: framework/_config/routes#coreroutes
+---
+SilverStripe\Control\Director:
+  rules:
+    'staff': 'StaffController'
+    'guest': 'GuestController'
