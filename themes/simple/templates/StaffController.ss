@@ -30,16 +30,6 @@
                         <h1>$getRole</h1>
                     </div>
 
-                    <div class="mb-3 mt-5">
-                        <h2>Order list</h2>
-                        <div id="order-list">
-                            <div v-for="order in orders_list">
-                                <p>{{ order.id }} <span class="order-status">{{ order.status }}</span></p>
-                                <button v-on:click="process_order(order.id)">Send</button>
-                            </div>
-                        </div>
-                    </div>
-
                     <div class="mb-3" style="margin-top: 1.9rem;">
                         <a class="btn btn-sm btn-danger" href="/staff/doLogout">Logout</a>
                     </div>
@@ -63,6 +53,20 @@
                     </form>
                 <% end_if %>
             </div>
+
+            <% if $getRole %>
+                <div class="row mt-5">
+                    <div class="d-flex justify-content-center">
+                        <h2>Order list</h2>
+                        <div id="order-list">
+                            <div v-for="order in orders_list">
+                                <p>{{ order.id }} <span class="order-status">{{ order.status }}</span></p>
+                                <button v-on:click="process_order(order.id)">Send</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% end_if %>
         </div>
     </div>
 </body>

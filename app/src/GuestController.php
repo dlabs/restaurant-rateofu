@@ -70,7 +70,8 @@ namespace {
                     "id" => $order_item->ID,
                     "name" => $order_item->Name,
                     "type" => $order_item->Type,
-                    "price" => $order_item->Price,
+                    "price" => $order_item->dbObject("Price")->getAmount(),
+                    "currency" => $order_item->dbObject("Price")->getCurrency(),
                 ];
             }
 

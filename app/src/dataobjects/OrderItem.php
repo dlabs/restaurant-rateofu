@@ -2,7 +2,6 @@
 
 namespace DLabs\DataObjects;
 
-use SilverStripe\ORM\FieldType\DBText;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBMoney;
 

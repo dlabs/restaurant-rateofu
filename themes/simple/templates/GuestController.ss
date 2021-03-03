@@ -23,48 +23,47 @@
 </head>
 <body>
     <div class="container">
-        <div class="row">
-            <div class="col">
-                <h1>Table $table_id</h1>
-            </div>
+        <div class="row mt-5">
+            <h1>Table: <b>$table_id</b></h1>
+        </div>
 
-            <div class="col">
-                <h2>Order form</h2>
-                <div id="order-form">
-                    <div v-for="menu_item in menu_items">
-                        <label :for="'order_item_' + menu_item.id">{{ menu_item.name }}</label>
-                        <input :id="'order_item_' + menu_item.id" class="menu-item-qty" type="number" min="0" step="1" value="0" :data-menu-item="menu_item.id"/>
-                    </div>
-
-                    <button v-on:click="submit_order()">Send</button>
+        <div class="row mt-5">
+            <h2>Order form</h2>
+            <div id="order-form">
+                <div v-for="menu_item in menu_items" class="menu-item mb-3">
+                    <label :for="'order_item_' + menu_item.id" class="name form-label">{{ menu_item.name }}</label>
+                    <input :id="'order_item_' + menu_item.id" type="number" class="form-control" min="0" step="1" value="0" :data-menu-item="menu_item.id">
+                    <label :for="'order_item_' + menu_item.id" class="price form-label"><span>{{ menu_item.price }}</span> <span>{{ menu_item.currency }}</span></label>
                 </div>
+
+                <button v-on:click="submit_order()">Send</button>
             </div>
+        </div>
 
-            <div class="col">
+        <div class="row mt-5">
+            <div id="order-list">
                 <h2>Order list</h2>
-                <div id="order-list">
-                    <div v-for="order in orders_list">
-                        <div>
-                            <p class="order-list-item">{{ order.id }}
-                            <template v-if="order.drinks_ready == '1' && order.drinks_served == '0'">
-                                <span class="pill pill-rnd">Drinks prepared</span>
-                            </template>
-                            <template v-if="order.drinks_served == '1'">
-                                <span class="pill pill-rnd">Drinks served</span>
-                            </template>
-                            <template v-if="order.food_ready == '1' && order.food_served == '0'">
-                                <span class="pill pill-rnd">Food prepared</span>
-                            </template>
-                            <template v-if="order.food_served == '1'">
-                                <span class="pill pill-rnd">Food served</span>
-                            </template>
+                <div v-for="order in orders_list">
+                    <div>
+                        <p class="order-list-item">{{ order.id }}
+                        <template v-if="order.drinks_ready == '1' && order.drinks_served == '0'">
+                            <span class="pill pill-rnd">Drinks prepared</span>
+                        </template>
+                        <template v-if="order.drinks_served == '1'">
+                            <span class="pill pill-rnd">Drinks served</span>
+                        </template>
+                        <template v-if="order.food_ready == '1' && order.food_served == '0'">
+                            <span class="pill pill-rnd">Food prepared</span>
+                        </template>
+                        <template v-if="order.food_served == '1'">
+                            <span class="pill pill-rnd">Food served</span>
+                        </template>
 
-                            <span class="order-status">{{ order.status }}</span>
+                        <span class="order-status">{{ order.status }}</span>
 
-                            </p>
-                        </div>
-                        <p :class="'order_details_' + order.id" style="display: none;">{{ order.items }}</p>
+                        </p>
                     </div>
+                    <p :class="'order_details_' + order.id" style="display: none;">{{ order.items }}</p>
                 </div>
             </div>
         </div>
@@ -149,10 +148,47 @@
     });
 </script>
 <style>
+    #order-list {
+        margin-top: 100px;
+    }
+    
     .order-list-item {
         display: flex;
         justify-content: space-between;
         align-items: center;
+    }
+
+    .menu-item {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        width: 80%;
+        margin: 0 auto;
+    }
+
+    .menu-item input {
+        width: 60px;
+        margin: 0 20px;
+    }
+
+    .menu-item label {
+        margin-top: 7px;
+    }
+
+    .menu-item label.price {
+        width: 100px;
+        font-weight: 600;
+    }
+
+    #order-form {
+        width: 45%;
+        margin: 0 auto;
+    }
+
+    #order-form button {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
     }
 </style>
 </html>
