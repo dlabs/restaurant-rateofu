@@ -1,0 +1,16 @@
+<div class="cart-container">
+<div>
+    <h2>
+        Add Items To Your Order
+    </h2>
+    <div>
+        <mat-selection-list #itemsOnDom>
+            <mat-list-option checkboxPosition="before" *ngFor="let item of $items | async" [value]="item" >
+              <span style="display: flex;justify-content: space-between;"><div>{{item.name}}</div> <div>&euro;{{item.price}}</div> <div><input  type="number" size="3">
+            </div> </span>
+            </mat-list-option>
+          </mat-selection-list>
+    </div>
+    <button (click)="placeOrder()" class="place-order" mat-raised-button color="accent">Place An Order</button>
+</div>
+</div>
