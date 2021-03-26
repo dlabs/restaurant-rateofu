@@ -15,12 +15,16 @@ import { CommonModule } from '@angular/common';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { CartComponent } from './components/cart/cart.component';
-import { OrderComponent } from './components/order/order.component';
+import { OrdersComponent } from './components/orders/orders.component';
 import { LoginComponent } from './components/login/login.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {CdkTableModule} from "@angular/cdk/table";
+import {MatTableModule} from '@angular/material/table';
+import { OrdersDetailsComponent } from './components/orders-details/orders-details.component';
+
+
 
 
 
@@ -29,8 +33,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
   declarations: [
     AppComponent,
     LoginComponent,
-    OrderComponent,
-    CartComponent
+    OrdersComponent,
+    OrdersDetailsComponent
   ],
   imports: [
     BrowserModule,
@@ -39,11 +43,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     HttpClientModule,
     CommonModule,
     FormsModule,
+    CdkTableModule,
     MatButtonModule,
     MatInputModule,
     MatCardModule,
     MatListModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatTableModule
   ],
   providers: [],
   bootstrap: [AppComponent]

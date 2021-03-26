@@ -13,6 +13,10 @@ export class AppService {
 
   constructor(private http: HttpClient) { }
 
+  getOrders(): Observable<any> {
+    return this.http.get<any>(`${this.ordersUrl}`);
+  }
+
   createOrder(data): Observable<any> {
     return this.http.post<any>(`${this.ordersUrl}`, data);
   }

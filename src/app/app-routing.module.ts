@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CartComponent } from './components/cart/cart.component';
 import { LoginComponent } from './components/login/login.component';
-import { OrderComponent } from './components/order/order.component';
+import { OrdersDetailsComponent } from './components/orders-details/orders-details.component';
+import { OrdersComponent } from './components/orders/orders.component';
 
 
 const appRoutes: Routes = [
@@ -11,12 +11,12 @@ const appRoutes: Routes = [
     component: LoginComponent
   },
   {
-    path: "order",
-    component: OrderComponent
+    path: "orders",
+    component: OrdersComponent
   },
   {
-    path: "cart",
-    component: CartComponent
+    path: "orders-details",
+    component: OrdersDetailsComponent
   },
   {
     path: '',
