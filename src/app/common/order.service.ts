@@ -1,7 +1,6 @@
 import { AngularFirestore } from '@angular/fire/firestore'
 import { Injectable } from '@angular/core';
 import { Order } from '../order.model';
-import { ListAllComponent } from '../staff/list-all/list-all.component';
 
 
 @Injectable({
@@ -21,5 +20,11 @@ export class OrderService {
 
   getAllOrders() {
     return this.firestore.collection('orders').get()
+  }
+
+  updateOrder(order: Order) {
+    let id = order.id;
+    delete order.id;
+    this.firestore.doc('orders/' + id).update(order);
   }
 }

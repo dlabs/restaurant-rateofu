@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { OrderService } from 'src/app/common/order.service';
 import { Item } from 'src/app/item.model';
 
 @Component({
@@ -9,8 +10,31 @@ import { Item } from 'src/app/item.model';
 export class ListOrderComponent implements OnInit {
 
   constructor() { }
+
   @Input() items: Item[] = [];
+  @Input() orderId: string;
+  @Output() upgradeStatus = new EventEmitter<{ orderId: string, itemId: number, status: string }>();
 
   ngOnInit(): void {
+  }
+
+  private getNewStatus(old: string) {
+    switch (old) {
+      case 'ordered':
+        return 'preparing';
+      case 'preparing':
+        return 'ready';
+      case 'ready':
+        return 'served';
+    }
+  }
+
+  onUpgradeStatus(orderId: string, itemId: number, status: string) {
+    let newStatus = this.getNewStatus(status);
+    this.upgradeStatus.emit({
+      orderId: orderId,
+      itemId: itemId,
+      status: newStatus
+    })
   }
 }
