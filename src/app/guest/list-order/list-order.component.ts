@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { OrderService } from 'src/app/common/order.service';
 import { Order } from 'src/app/order.model';
 
@@ -12,12 +12,13 @@ export class ListOrderComponent implements OnInit {
   constructor(private orderService: OrderService) { }
 
   orders: Order[]
-  myOrder: Order;
+  @Input() myOrder: Order;
   // todo: make dynimic
   tableId = 'table1'
 
   ngOnInit(): void {
-    // get all orders
+    // should get only the order for this table, not all
+    /*
     this.orderService.getOrders().subscribe(data => {
       this.orders = data.map(e => {
         return {
@@ -29,5 +30,6 @@ export class ListOrderComponent implements OnInit {
         return order.tableId == this.tableId
       }).shift()
     })
+    */
   }
 }

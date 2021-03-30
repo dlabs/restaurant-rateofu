@@ -5,6 +5,7 @@ import { SubmitOrderComponent } from './guest/submit-order/submit-order.componen
 
 const routes: Routes = [
   { path: 'guest', component: ListOrderComponent },
+  { path: 'guest/order', component: SubmitOrderComponent },
 ];
 
 @NgModule({
