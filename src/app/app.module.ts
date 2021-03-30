@@ -20,13 +20,15 @@ import { HearderComponent } from './hearder/hearder.component';
 import { SubmitOrderComponent } from './guest/submit-order/submit-order.component';
 import { environment } from 'src/environments/environment';
 import { ListOrderComponent } from './guest/list-order/list-order.component';
+import { WatchOrderComponent } from './guest/watch-order/watch-order.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HearderComponent,
     SubmitOrderComponent,
-    ListOrderComponent
+    ListOrderComponent,
+    WatchOrderComponent
   ],
   imports: [
     BrowserModule,
