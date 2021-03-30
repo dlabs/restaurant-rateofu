@@ -1,0 +1,8 @@
+<div *ngFor="let order of allOrders">
+  <app-list-order
+  [items]="order.items"
+  [orderId]="order.id"
+  (upgradeStatus)="onStatusUpdate($event)"
+  ></app-list-order>
+  <hr>
+</div>
