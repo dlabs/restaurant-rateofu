@@ -1,3 +1,5 @@
+<h1>List all ordered items</h1>
+<h2><small>You are logged in as {{ loginService.userRole }}</small></h2>
 <div *ngFor="let order of allOrders">
   <app-list-order
   [items]="order.items"

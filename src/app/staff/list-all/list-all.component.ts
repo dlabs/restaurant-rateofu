@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { LoginService } from 'src/app/common/login.service';
 import { OrderService } from 'src/app/common/order.service';
 import { Item } from 'src/app/item.model';
 import { Order } from 'src/app/order.model';
@@ -12,9 +14,12 @@ export class ListAllComponent implements OnInit {
 
   allOrders: Order[] = [];
 
-  constructor(private orderService: OrderService) { }
+  constructor(private orderService: OrderService, public loginService: LoginService, private router: Router) { }
 
   ngOnInit(): void {
+    if (!this.loginService.userRole) {
+      this.router.navigate(['/login']);
+    }
     this.orderService.getOrders().subscribe(data => {
       this.allOrders = data.map(e => {
         return {
