@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Order } from 'src/app/order.model';
+import { Item } from 'src/app/item.model';
 
 @Component({
   selector: 'app-list-order',
@@ -9,7 +9,7 @@ import { Order } from 'src/app/order.model';
 export class ListOrderComponent implements OnInit {
 
   constructor() { }
-  @Input() myOrder: Order;
+  @Input() items: Item[] = [];
 
   ngOnInit(): void {
   }

@@ -21,6 +21,7 @@ import { SubmitOrderComponent } from './guest/submit-order/submit-order.componen
 import { environment } from 'src/environments/environment';
 import { ListOrderComponent } from './guest/list-order/list-order.component';
 import { WatchOrderComponent } from './guest/watch-order/watch-order.component';
+import { ListAllComponent } from './staff/list-all/list-all.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { WatchOrderComponent } from './guest/watch-order/watch-order.component';
     HearderComponent,
     SubmitOrderComponent,
     ListOrderComponent,
-    WatchOrderComponent
+    WatchOrderComponent,
+    ListAllComponent
   ],
   imports: [
     BrowserModule,

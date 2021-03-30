@@ -24,6 +24,6 @@
 </form>
 
 
-<app-list-order [myOrder]="order"></app-list-order>
+<app-list-order [items]="order.items"></app-list-order>
 
 <button mat-raised-button color="accent" [disabled]="!order.items.length" (click)="onSendOrder()">Send order!</button>
