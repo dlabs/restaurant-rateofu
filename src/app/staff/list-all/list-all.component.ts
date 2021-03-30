@@ -28,8 +28,22 @@ export class ListAllComponent implements OnInit {
         } as Order;
       })
 
-      console.log(this.allOrders);
+      this.allOrders.map(order => {
+        console.log(order.items);
+
+        if (this.loginService.userRole == 'waiter') {
+          order.items = order.items.filter(item => {
+            return item.status == 'ready'
+          })
+        } else {
+          order.items = order.items.filter(item => {
+            return item.status == 'ordered' || item.status == 'preparing';
+          })
+        }
+        console.log(order.items);
+      })
     })
+
   }
 
   onStatusUpdate(event) {
