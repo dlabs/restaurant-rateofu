@@ -6,11 +6,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HearderComponent } from './hearder/hearder.component';
+import { SubmitOrderComponent } from './guest/submit-order/submit-order.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HearderComponent
+    HearderComponent,
+    SubmitOrderComponent
   ],
   imports: [
     BrowserModule,
