@@ -1,5 +1,6 @@
 import { AngularFirestore } from '@angular/fire/firestore'
 import { Injectable } from '@angular/core';
+import { Order } from '../order.model';
 
 
 @Injectable({
@@ -11,5 +12,9 @@ export class OrderService {
 
   getOrders() {
     return this.firestore.collection('orders').snapshotChanges();
+  }
+
+  postOrder(order: Order) {
+    return this.firestore.collection('orders').add(order);
   }
 }

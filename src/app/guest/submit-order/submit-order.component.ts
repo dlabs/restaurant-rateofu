@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { OrderService } from 'src/app/common/order.service';
 import { Order } from 'src/app/order.model';
 
@@ -17,7 +18,7 @@ export class SubmitOrderComponent implements OnInit {
     quantity: new FormControl(''),
   });
 
-  constructor(private orderService: OrderService) { }
+  constructor(private orderService: OrderService, private router: Router) { }
 
   menu = [
     { name: "Grilled space-whale steak woth algea puree", type: 'food', price: 66.5 },
@@ -36,6 +37,7 @@ export class SubmitOrderComponent implements OnInit {
     }
   }
 
+  // todo: add validation on the form
   onAddToOrder() {
     this.order.items.push({
       name: this.orderForm.value.itemName,
@@ -45,4 +47,14 @@ export class SubmitOrderComponent implements OnInit {
     });
   }
 
+  onSendOrder() {
+    if (this.order.items.length < 1) {
+      // todo: beautify this error
+      alert("Can't subnit an empty order")
+      return;
+    }
+    this.orderService.postOrder(this.order).then(() => {
+      this.router.navigate(['/guest']);
+    });
+  }
 }
