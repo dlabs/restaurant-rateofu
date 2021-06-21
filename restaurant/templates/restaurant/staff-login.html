@@ -1,0 +1,54 @@
+{% extends 'restaurant/select.html' %}
+
+{% load static %}
+
+{% block js %}
+{{ block.super }}
+<script type="text/javascript" src="{% static 'restaurant/js/login.js' %}"></script>
+{% endblock %}
+
+{% block title %}Staff login{% endblock %}
+
+{% block logout %}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-5">
+        <div class="card">
+            <div class="card-header card-header-primary">
+                <h4 class="card-title">Login</h4>
+            </div>
+            <div class="card-body">
+                <form method="post" spellcheck="false" autocomplete="off">
+                {% csrf_token %}
+                    {% if form.errors %}
+                        <small class="text-danger">{{ form.non_field_errors.0 }}</small>
+                    {% endif %}
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group bmd-form-group">
+                                <label class="bmd-label-floating">Username</label>
+                                <input type="text" class="form-control" name="username" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group bmd-form-group">
+                                <label for="role">Role</label>
+                                <select class="form-control" data-style="btn btn-link" name="role" id="role">
+                                    <option></option>
+                                    {% for role in roles %}
+                                        <option value="{{ role.0 }}">{{ role.1 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary pull-right">login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

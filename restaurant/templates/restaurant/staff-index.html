@@ -1,0 +1,40 @@
+{% extends 'restaurant/base.html' %}
+
+{% load static %}
+
+{% block css %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static 'restaurant/css/links.css' %}" />
+{% endblock %}
+
+{% block title %}Welcome, {{ request.user.employee }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-8">
+        <div class="card">
+            <div class="card-header card-header-danger">
+                <h4 class="card-title">Demands</h4>
+            </div>
+            <div class="card-body table-responsive">
+                <table class="table table-hover">
+                    <thead class="text-danger">
+                        <th>Name</th>
+                        <th>Quantity</th>
+                        <th>Status</th>
+                    </thead>
+                    <tbody>
+                        {% for demand in demands %}
+                        <tr>
+                            <td><a href="{% url 'restaurant:demand' demand.pk %}">{{ demand.item }}</a></td>
+                            <td><a href="{% url 'restaurant:demand' demand.pk %}">{{ demand.quantity }}</a></td>
+                            <td><a href="{% url 'restaurant:demand' demand.pk %}">{{ demand.get_status_display }}</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

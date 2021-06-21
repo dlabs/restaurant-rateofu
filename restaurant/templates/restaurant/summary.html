@@ -1,0 +1,38 @@
+{% extends 'restaurant/base.html' %}
+
+{% block title %}Order summary{% endblock %}
+
+{% block logout %}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-8">
+        <div class="card">
+            <div class="card-header card-header-primary">
+                <h4 class="card-title">Your order</h4>
+            </div>
+            <div class="card-body table-responsive">
+                <table class="table table-hover">
+                    <thead class="text-primary">
+                        <th>Name</th>
+                        <th>Quantity</th>
+                        <th>Cost</th>
+                    </thead>
+                    <tbody>
+                        {% for demand in order.demands.all %}
+                        <tr>
+                            <td>{{ demand.item }}</td>
+                            <td>{{ demand.quantity }}</td>
+                            <td>&#163; {{ demand.cost }}</td>
+                        </tr>
+                        {% endfor %}
+                        <th>Total</th>
+                        <td></td>
+                        <td>&#163; {{ order.cost }}</td>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

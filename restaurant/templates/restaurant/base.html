@@ -1,0 +1,49 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <title>Restaurant</title>
+        {% block css %}
+        <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" />
+        <link rel="stylesheet" type="text/css" href="{% static 'restaurant/css/material-dashboard-new.min.css' %}" />
+        {% endblock %}
+        {% block js %}
+        <script type="text/javascript" src="{% static 'restaurant/js/jquery.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'restaurant/js/popper.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'restaurant/js/bootstrap-material-design.min.js' %}"></script>
+        {% endblock %}
+    </head>
+    <body>
+        <div class="wrapper">
+            <div class="main-panel">
+                <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top">
+                    <div class="container-fluid">
+                        <div class="navbar-wrapper">
+                            <p class="navbar-brand">{% block title %}{% endblock %}</p>
+                        </div>
+                        {% block logout %}
+                        <div class="collapse navbar-collapse justify-content-end">
+                            <ul class="navbar-nav">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'restaurant:staff-logout' %}">
+                                        <i class="material-icons">logout</i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        {% endblock %}
+                    </div>
+                </nav>
+                <div class="content">
+                    <div class="container-fluid">
+                    {% block content %}{% endblock %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

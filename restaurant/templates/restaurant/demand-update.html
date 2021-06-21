@@ -1,0 +1,59 @@
+{% extends 'restaurant/select.html' %}
+
+{% load static %}
+
+{% block css %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static 'restaurant/css/links.css' %}" />
+{% endblock %}
+
+{% block js %}
+{{ block.super }}
+<script type="text/javascript" src="{% static 'restaurant/js/demand.js' %}"></script>
+{% endblock %}
+
+{% block title %}Demand{% endblock %}
+
+{% block content %}
+<form method="post" spellcheck="false" autocomplete="off">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-8">
+            <div class="card">
+                <div class="card-header card-header-danger">
+                    <h4 class="card-title">Demand details</h4>
+                </div>
+                <div class="card-body table-responsive">
+                    <table class="table table-hover">
+                        <thead class="text-danger">
+                            <th>Name</th>
+                            <th>Quantity</th>
+                            <th>Status</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ demand.item }}</td>
+                                <td>{{ demand.quantity }}</td>
+                                <td>
+                                    <div class="form-group bmd-form-group">
+                                        <select class="form-control" data-style="btn btn-link" name="status">
+                                            {% for status in statuses %}
+                                                <option value="{{ status.0 }}"{% if demand.status == status.0 %} selected{% endif %}>{{ status.1 }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<div class="row">
+    <div class="col-8">
+        <a href="{% url 'restaurant:staff-index' %}" class="pull-right">Back</a>
+    </div>
+</div>
+{% endblock %}
