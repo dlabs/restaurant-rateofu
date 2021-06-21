@@ -51,6 +51,9 @@ class Demand(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
 
+    def __str__(self):
+        return f'{self.item} ({self.quantity}), {self.get_status_display()}'
+
     def get_absolute_url(self):
         return reverse('restaurant:demand', args=[self.pk])
 
@@ -64,3 +67,9 @@ class Order(models.Model):
 
     def cost(self):
         return sum(demand.cost() for demand in self.demands.all())
+
+    def served(self):
+        for demand in self.demands.all():
+            if demand.status != Demand.SERVED:
+                return False
+        return True

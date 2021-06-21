@@ -10,6 +10,7 @@
         <div class="card">
             <div class="card-header card-header-primary">
                 <h4 class="card-title">Your order</h4>
+                <p class="card-category">{% if order.served %}Everything has been served. Enjoy!{% else %}You have more meals coming up soon.{% endif %}</p>
             </div>
             <div class="card-body table-responsive">
                 <table class="table table-hover">
