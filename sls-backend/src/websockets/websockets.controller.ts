@@ -5,11 +5,10 @@ import { WsConnectionService } from './services/ws-connection.service';
 export class WebsocketsController {
     constructor(private readonly wsConnectionService: WsConnectionService) {}
 
-    @HttpCode(204)
     @Post('register')
-    public async registerWsConnection(@Body() data: { connectionId: string; error: string }) {
+    public async registerWsConnection(@Body() data: { connectionId: string }) {
         // * This method is executed by $connect hook on AWS API Gateway
-        await this.wsConnectionService.registerConnection(data.connectionId, data.error);
-        return;
+        await this.wsConnectionService.registerConnection(data.connectionId);
+        return data.connectionId;
     }
 }

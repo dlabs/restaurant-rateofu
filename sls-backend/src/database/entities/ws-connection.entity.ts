@@ -9,9 +9,6 @@ export class WsConnectionEntity {
     @Column({ name: 'connection_id', type: 'varchar', nullable: false })
     public connectionId: string;
 
-    @Column({ name: 'connection_error', type: 'varchar', nullable: true })
-    public error: string;
-
     @Column({ name: 'staff_id', type: 'int', nullable: true })
     public staffId: number;
 
