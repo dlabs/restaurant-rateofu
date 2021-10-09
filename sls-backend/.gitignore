@@ -6,6 +6,9 @@
 serverless.yml
 .serverless
 
+# env
+.env
+
 # Logs
 logs
 *.log
