@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { StaffEntity } from 'src/database/entities/staff.entity';
 import { StaffStatus } from 'src/shared/enums/staff-status.enum';
 import { Repository } from 'typeorm';
-import cryptoRandomString from 'crypto-random-string';
+import { nanoid } from 'nanoid';
 import { AuthRequest } from '../requests/auth.request';
 
 @Injectable()
@@ -30,7 +30,7 @@ export class StaffService {
             name,
             role,
             status: StaffStatus.AVAILABLE,
-            accessToken: cryptoRandomString({ length: 32, type: 'url-safe' }),
+            accessToken: nanoid(32),
         });
 
         return { accessToken: newStaff.accessToken };
