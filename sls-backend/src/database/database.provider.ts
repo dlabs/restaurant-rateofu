@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 import { ConfigService } from 'src/config/config.service';
 import { EnvKeys } from 'src/config/env-keys.enum';
+import { ProductEntity } from './entities/product.entity';
 
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
@@ -19,7 +20,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
             username: configService.get(EnvKeys.DB_USER),
             password: configService.get(EnvKeys.DB_PASS),
             database: configService.get(EnvKeys.DB_DB),
-            entities: [],
+            entities: [ProductEntity],
             synchronize: false,
             logging: false,
         };
