@@ -5,6 +5,7 @@ import { ConfigModule } from './config/config.module';
 import { ConfigService } from './config/config.service';
 import { CustomerModule } from './customer-cabinet/customer.module';
 import { TypeOrmConfigService } from './database/database.provider';
+import { StaffModule } from './staff-cabinet/staff.module';
 
 @Module({
     imports: [
@@ -14,6 +15,7 @@ import { TypeOrmConfigService } from './database/database.provider';
             inject: [ConfigService],
         }),
         CustomerModule,
+        StaffModule,
     ],
     controllers: [AppController],
     providers: [],
