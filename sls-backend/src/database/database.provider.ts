@@ -6,6 +6,7 @@ import { OrderItemEntity } from './entities/order-item.entity';
 import { OrderEntity } from './entities/order.entity';
 import { ProductEntity } from './entities/product.entity';
 import { StaffEntity } from './entities/staff.entity';
+import { WsConnectionEntity } from './entities/ws-connection.entity';
 
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
@@ -23,7 +24,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
             username: configService.get(EnvKeys.DB_USER),
             password: configService.get(EnvKeys.DB_PASS),
             database: configService.get(EnvKeys.DB_DB),
-            entities: [ProductEntity, StaffEntity, OrderEntity, OrderItemEntity],
+            entities: [ProductEntity, StaffEntity, OrderEntity, OrderItemEntity, WsConnectionEntity],
             synchronize: false,
             logging: false,
         };

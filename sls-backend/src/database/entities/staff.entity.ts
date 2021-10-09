@@ -22,6 +22,8 @@ export class StaffEntity {
     })
     public status: StaffStatus;
 
+    public wsConnections: any;
+
     @Column({ name: 'access_token', type: 'varchar', nullable: false })
     public accessToken: string;
 }
