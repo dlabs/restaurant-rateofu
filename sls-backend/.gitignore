@@ -4,6 +4,7 @@
 
 # sls
 serverless.yml
+.serverless
 
 # Logs
 logs

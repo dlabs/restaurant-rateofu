@@ -1,9 +1,11 @@
 import { Controller, Get } from '@nestjs/common';
 
 @Controller('/')
-export class MainController {
+export class AppController {
     @Get('health')
     health() {
-        return 'Hello from serverless route!';
+        return {
+            msg: 'Hello from serverless app!',
+        };
     }
 }
