@@ -5,12 +5,15 @@ import { ApiGatewayManagementApi } from 'aws-sdk';
 import { Repository } from 'typeorm';
 import { ConfigService } from 'src/config/config.service';
 import { EnvKeys } from 'src/config/env-keys.enum';
+import { StaffEntity } from 'src/database/entities/staff.entity';
 
 @Injectable()
 export class WsConnectionService {
     constructor(
         @InjectRepository(WsConnectionEntity)
         private readonly wsConnectionRepository: Repository<WsConnectionEntity>,
+        @InjectRepository(StaffEntity)
+        private readonly staffRepository: Repository<StaffEntity>,
         private readonly configService: ConfigService, // private awsGatewayApi: ApiGatewayManagementApi = null,
     ) {}
 
@@ -22,12 +25,20 @@ export class WsConnectionService {
         await this.wsConnectionRepository.save({
             connectionId,
         });
-        setTimeout(() => this.sendMessageToSingleConnection(connectionId, { connectionAccepted: connectionId }), 5000);
         return;
     }
 
     public async unregisterConnection(connectionId: string) {
         await this.wsConnectionRepository.delete({ connectionId });
+        // TODO: Consider setting staff status to not_on_duty here if no single conn remain
+        return;
+    }
+
+    public async linkConnectionToStaff(connectionId: string, accessToken: string) {
+        const targetStaff = await this.staffRepository.findOne({ accessToken });
+        if (targetStaff) {
+            await this.wsConnectionRepository.update({ connectionId }, { staffId: targetStaff.id });
+        }
         return;
     }
 
