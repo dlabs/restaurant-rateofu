@@ -6,6 +6,7 @@ import { ConfigService } from './config/config.service';
 import { CustomerModule } from './customer-cabinet/customer.module';
 import { TypeOrmConfigService } from './database/database.provider';
 import { StaffModule } from './staff-cabinet/staff.module';
+import { WebsocketsModule } from './websockets/websockets.module';
 
 @Module({
     imports: [
@@ -16,6 +17,7 @@ import { StaffModule } from './staff-cabinet/staff.module';
         }),
         CustomerModule,
         StaffModule,
+        WebsocketsModule,
     ],
     controllers: [AppController],
     providers: [],
