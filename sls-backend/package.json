@@ -48,7 +48,6 @@
     "jest": "^27.0.6",
     "prettier": "^2.3.2",
     "serverless-offline": "^8.2.0",
-    "serverless-vpc-plugin": "^1.0.4",
     "supertest": "^6.1.3",
     "ts-jest": "^27.0.3",
     "ts-loader": "^9.2.3",
