@@ -16,6 +16,8 @@ export class ProductEntity {
     @Column({ name: 'price', type: 'money', nullable: false })
     public price: string;
 
+    public orderItems?: any; // any to avoid circular dependency
+
     public getFloatPrice() {
         return parseFloat(this.price.replace('$', ''));
     }
