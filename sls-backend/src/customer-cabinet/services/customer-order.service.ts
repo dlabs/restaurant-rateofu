@@ -4,6 +4,7 @@ import { OrderItemEntity } from 'src/database/entities/order-item.entity';
 import { OrderEntity } from 'src/database/entities/order.entity';
 import { ProductEntity } from 'src/database/entities/product.entity';
 import { OrderItemStatus } from 'src/shared/enums/order-item-status.enum';
+import { WsConnectionService } from 'src/websockets/services/ws-connection.service';
 import { Repository } from 'typeorm';
 import { OrderItem, SubmitOrderRequest } from '../requests/submit-order.request';
 
@@ -16,6 +17,7 @@ export class CustomerOrderService {
         private readonly orderItemRepository: Repository<OrderItemEntity>,
         @InjectRepository(ProductEntity)
         private readonly productRepository: Repository<ProductEntity>,
+        private readonly wsConnectionService: WsConnectionService,
     ) {}
 
     public async createAndSubmitOrder({ items, tableNo }: SubmitOrderRequest) {
@@ -41,9 +43,14 @@ export class CustomerOrderService {
             ),
         );
 
-        await this.orderItemRepository.save(preparedOrderItems);
+        const orderItems = await this.orderItemRepository.save(preparedOrderItems);
 
-        // TODO: Notify staff applications via WS that new order has been created
+        // * Notify staff applications via WS that new order has been created
+        await this.wsConnectionService.sendMessageToAllConnections({
+            event: 'newOrder',
+            createdOrder,
+            orderItems,
+        });
 
         return { totalOrderAmount };
     }

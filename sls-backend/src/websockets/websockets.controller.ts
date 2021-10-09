@@ -11,4 +11,11 @@ export class WebsocketsController {
         await this.wsConnectionService.registerConnection(data.connectionId);
         return data.connectionId;
     }
+
+    @Post('unregister')
+    public async unregisterWsConnection(@Body() data: { connectionId: string }) {
+        // * This method is executed by $disconnect hook on AWS API Gateway
+        await this.wsConnectionService.unregisterConnection(data.connectionId);
+        return data.connectionId;
+    }
 }
