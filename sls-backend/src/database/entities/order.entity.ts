@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { OrderItemEntity } from './order-item.entity';
 
 @Entity({ schema: 'public', name: 'orders' })
 export class OrderEntity {
@@ -17,7 +18,8 @@ export class OrderEntity {
     @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
     public createdAt: Date;
 
-    public orderItems?: any;
+    @OneToMany(() => OrderItemEntity, (oi) => oi.order)
+    public orderItems: OrderItemEntity[];
 
     public getFloatTotalAmount() {
         return parseFloat(this.totalAmount.replace('$', ''));

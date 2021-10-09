@@ -46,6 +46,7 @@ export class WsConnectionService {
     }
 
     public async sendMessageToAllConnections(payload: object) {
+        // * Since we are operating in lambda context - it is okay to create new api instance per function invocation
         const awsGatewayApi = new ApiGatewayManagementApi({
             endpoint: this.configService.get(EnvKeys.AWS_API_GATEWAY_WS_ENDPOINT),
         });
