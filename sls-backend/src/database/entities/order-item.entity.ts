@@ -12,7 +12,7 @@ export class OrderItemEntity {
     public productId: number;
 
     @ManyToOne(() => ProductEntity, (p) => p.orderItems)
-    @JoinColumn({ name: 'id' })
+    @JoinColumn({ name: 'product_id', referencedColumnName: 'id' })
     public product: ProductEntity;
 
     @Column({ name: 'order_id', type: 'int', nullable: false })

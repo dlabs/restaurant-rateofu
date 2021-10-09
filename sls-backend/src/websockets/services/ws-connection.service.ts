@@ -22,7 +22,7 @@ export class WsConnectionService {
         await this.wsConnectionRepository.save({
             connectionId,
         });
-        await this.sendMessageToSingleConnection(connectionId, { connectionAccepted: connectionId });
+        setTimeout(() => this.sendMessageToSingleConnection(connectionId, { connectionAccepted: connectionId }), 5000);
         return;
     }
 
