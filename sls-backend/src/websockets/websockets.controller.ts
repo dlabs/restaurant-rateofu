@@ -7,9 +7,9 @@ export class WebsocketsController {
 
     @HttpCode(204)
     @Post('register')
-    public async registerWsConnection(@Body() data: { connectionId: string }) {
+    public async registerWsConnection(@Body() data: { connectionId: string; error: string }) {
         // * This method is executed by $connect hook on AWS API Gateway
-        await this.wsConnectionService.registerConnection(data.connectionId);
+        await this.wsConnectionService.registerConnection(data.connectionId, data.error);
         return;
     }
 }

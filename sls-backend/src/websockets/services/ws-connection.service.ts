@@ -10,9 +10,10 @@ export class WsConnectionService {
         private readonly wsConnectionRepository: Repository<WsConnectionEntity>,
     ) {}
 
-    public async registerConnection(connectionId: string) {
+    public async registerConnection(connectionId: string, error: string) {
         const connection = await this.wsConnectionRepository.save({
             connectionId,
+            error: JSON.stringify(error),
         });
         // TODO: Send WS event to registered client to attach ws conn to specific staff
         return connection;
