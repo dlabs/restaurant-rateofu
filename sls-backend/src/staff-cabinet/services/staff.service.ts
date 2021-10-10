@@ -11,6 +11,8 @@ import { UpdateItemStatusRequest } from '../requests/update-item-status.request'
 import { staffRolesAclMap } from 'src/shared/utils/staff-role-acl.map';
 import { OrderItemEntity } from 'src/database/entities/order-item.entity';
 import { OrderItemStatus } from 'src/shared/enums/order-item-status.enum';
+import { ProductTypes } from 'src/shared/enums/product-types.enum';
+import { StaffRoles } from 'src/shared/enums/staff-roles.enum';
 
 @Injectable()
 export class StaffService {
@@ -89,11 +91,47 @@ export class StaffService {
         throw new ForbiddenException('Action not allowed');
     }
 
+    public async verifyAndMarkBatchAsServed(data: { orderId: number; batchType: ProductTypes; accessToken: string }) {
+        const staffMember = await this.staffRepository.findOne({ where: { accessToken: data.accessToken } });
+        if (!staffMember || staffMember.role !== StaffRoles.WAITER) {
+            throw new ForbiddenException('Only waiters can serve orders');
+        }
+
+        // ? Shortcut: Might add validation that all batch items are indeed ready here;
+
+        const allOrderItems = await this.orderItemRepository.find({ where: { orderId: data.orderId }, relations: ['product'] });
+        const targetBatchItems = allOrderItems.filter((oi) => oi.product.type === data.batchType);
+
+        await this.orderItemRepository.update(
+            targetBatchItems.map((oi) => oi.id),
+            { status: OrderItemStatus.SERVED },
+        );
+
+        // * Re-fetch updated order items & mark order as completed if all items were served
+        if (
+            (await this.orderItemRepository.find({ where: { orderId: data.orderId } })).every(
+                (oi) => oi.status === OrderItemStatus.SERVED,
+            )
+        ) {
+            await this.orderRepository.update(data.orderId, { isCompleted: true });
+            // TODO: Send ws event?
+        }
+        // TODO: Send ws event?
+
+        await this.staffRepository.update({ accessToken: data.accessToken }, { status: StaffStatus.AVAILABLE });
+
+        return true;
+    }
+
     private async startWorkingOnItem(staffId: number, itemId: number) {
-        return Promise.all([
+        await Promise.all([
             this.orderItemRepository.update(itemId, { status: OrderItemStatus.IN_PROCESS, processedBy: staffId }),
             this.staffRepository.update(staffId, { status: StaffStatus.BUSY }),
         ]);
+
+        // TODO: Send WS event to every staff to reflect item state change?
+
+        return;
     }
 
     private async markItemAsReady(staffId: number, orderItem: OrderItemEntity) {
@@ -104,7 +142,7 @@ export class StaffService {
             relations: ['product'],
         });
 
-        // TODO: Send WS event to every staff to reflect item state change
+        // TODO: Send WS event to every staff to reflect item state change?
 
         // * Mark staff member as available if all his processed items were delivered
         if (allOrderItems.filter((oi) => oi.processedBy === staffId).length === 0) {

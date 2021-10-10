@@ -48,8 +48,10 @@ export class CustomerOrderService {
         // * Notify staff applications via WS that new order has been created
         await this.wsConnectionService.sendMessageToAllConnections({
             event: 'newOrder',
-            createdOrder,
-            orderItems,
+            payload: {
+                createdOrder,
+                orderItems,
+            },
         });
 
         return { totalOrderAmount };

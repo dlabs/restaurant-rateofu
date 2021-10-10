@@ -16,6 +16,9 @@ export class ProductEntity {
     @Column({ name: 'price', type: 'money', nullable: false })
     public price: string;
 
+    @Column({ name: 'image_url', type: 'varchar', nullable: true })
+    public imageUrl: string;
+
     public orderItems?: any; // any to avoid circular dependency
 
     public getFloatPrice() {

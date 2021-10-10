@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import { ProductTypes } from 'src/shared/enums/product-types.enum';
 import { AuthRequest } from './requests/auth.request';
 import { UpdateItemStatusRequest } from './requests/update-item-status.request';
 import { StaffService } from './services/staff.service';
@@ -15,6 +16,19 @@ export class StaffController {
     @Get('orders')
     public async getPendingOrders() {
         return this.staffService.getPendingOrders();
+    }
+
+    @Patch('orders/:orderId/batches/:batchType')
+    public async markBatchAsServed(
+        @Param('orderId') orderId: number,
+        @Param('batchType') batchType: ProductTypes,
+        @Body() { accessToken }: { accessToken: string },
+    ) {
+        return this.staffService.verifyAndMarkBatchAsServed({
+            accessToken,
+            batchType,
+            orderId,
+        });
     }
 
     @Patch('orders/:orderId/items/:itemId')
