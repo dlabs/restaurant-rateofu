@@ -3,12 +3,16 @@ import React from "react";
 import { OrderItemModel } from "models";
 
 import styles from "./OrderDetails.module.css";
+import "./buttons.css";
 
 type Props = {
     orderItems: OrderItemModel[];
+    tableNo: number;
+    orderSubmitted: boolean;
     onAddItem: (id: number) => void;
     onDeleteItem: (id: number) => void;
     onRemoveSingleItem: (id: number) => void;
+    onSubmitOrder: (orderItems: OrderItemModel[], tableNo: number) => void;
 };
 
 const getTotalAmount = (orderItems: OrderItemModel[]) => {
@@ -20,23 +24,45 @@ const getTotalAmount = (orderItems: OrderItemModel[]) => {
 };
 
 export default function OrderDetails(props: Props) {
-    const { onAddItem, orderItems, onDeleteItem, onRemoveSingleItem } = props;
+    const {
+        onAddItem,
+        orderItems,
+        onDeleteItem,
+        onRemoveSingleItem,
+        onSubmitOrder,
+        orderSubmitted,
+        tableNo,
+    } = props;
     const totalAmount = getTotalAmount(orderItems);
 
     return (
         <div>
-            <div className="flex items-center justify-center mt-20 pl-10">
+            {orderSubmitted && (
+                <div className="text-center text-white text-lg">
+                    <img src="https://cdn2.iconfinder.com/data/icons/smooth-conceptual-vectors-3/95/186-512.png" alt="" />
+                    <h3 className="">
+                        Thank you for the order! We are working on it :)
+                    </h3>
+                    <h4 className="mt-4">You can check your order summary below</h4>
+                </div>
+            )}
+            <div className="flex items-center justify-center mt-20 pl-10 text-xl">
                 <div className="col-span-12">
                     <div className="overflow-auto lg:overflow-visible">
                         <table
-                            className={`${styles.table} text-gray-400 border-separate space-y-6 text-sm`}
+                            className={`${styles.table} text-gray-400 border-separate space-y-6 text-base`}
                         >
                             <thead className="bg-gray-800 text-gray-500">
                                 <tr>
                                     <th className="p-3 text-left">Product</th>
                                     <th className="p-3 text-left">Price</th>
                                     <th className="p-3 text-left">Quantity</th>
-                                    <th className="p-3 text-left">Actions</th>
+                                    <th
+                                        hidden={orderSubmitted}
+                                        className="p-3 text-left"
+                                    >
+                                        Actions
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -59,14 +85,17 @@ export default function OrderDetails(props: Props) {
                                             </div>
                                         </td>
                                         <td className="p-3 font-bold">
-                                            {orderItem.price}
+                                            ${orderItem.price}
                                         </td>
                                         <td className="p-3">
                                             <span className="bg-green-400 text-gray-50 rounded-md px-2">
                                                 {orderItem.quantity}
                                             </span>
                                         </td>
-                                        <td className="p-3 ">
+                                        <td
+                                            hidden={orderSubmitted}
+                                            className="p-3 "
+                                        >
                                             <span
                                                 className="text-gray-400 hover:text-gray-100 mr-2"
                                                 onClick={() =>
@@ -114,6 +143,16 @@ export default function OrderDetails(props: Props) {
                                 </tr>
                             </tbody>
                         </table>
+                        {!orderSubmitted && (
+                            <button
+                                className="cpbtn raise"
+                                onClick={() =>
+                                    onSubmitOrder(orderItems, tableNo)
+                                }
+                            >
+                                Submit Order
+                            </button>
+                        )}
                     </div>
                 </div>
             </div>
