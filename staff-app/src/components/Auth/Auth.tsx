@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from "react";
 
+import { useAppDispatch } from "store";
 import { getRoles } from "api/staff-api";
 import { StaffRoles } from "./staff-roles.enum";
+import { authenticate } from "store/slices/staff-slice.reducer";
 
 import styles from "./Auth.module.css";
 
 export default function Auth() {
     const [isLoaded, setIsLoaded] = useState(false);
     const [roles, setRoles] = useState<StaffRoles[]>([]);
+    const [name, setName] = useState("");
+    const [selectedRole, setSelectedRole] = useState<StaffRoles>();
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
         const loadRoles = async () => {
@@ -23,17 +28,40 @@ export default function Auth() {
         loadRoles();
     }, []);
 
+    const submitForm = async (e: React.SyntheticEvent) => {
+        e.preventDefault();
+
+        if (!name || !selectedRole) return;
+
+        await dispatch(
+            authenticate({
+                name,
+                role: selectedRole,
+            })
+        );
+    };
+
     if (!isLoaded) return <div>Loading...</div>;
 
     return (
         <div>
-            <form action="#" className={styles.form}>
+            <form action="#" className={styles.form} onSubmit={submitForm}>
                 <div className={styles.frontSignIn}>
-                    <input type="text" placeholder="Name" />
+                    <input
+                        type="text"
+                        placeholder="Name"
+                        onChange={(e) => setName(e.target.value)}
+                    />
                     <div className={styles.select}>
-                        <select>
+                        <select
+                            onChange={(e) =>
+                                setSelectedRole(e.target.value as StaffRoles)
+                            }
+                        >
                             {roles.map((role) => (
-                                <option value={role}>{role}</option>
+                                <option key={role} value={role}>
+                                    {role}
+                                </option>
                             ))}
                         </select>
                     </div>
@@ -41,6 +69,7 @@ export default function Auth() {
                         className={styles.signinSubmit}
                         type="submit"
                         value="Go"
+                        disabled={!name || !selectedRole}
                     />
                 </div>
             </form>

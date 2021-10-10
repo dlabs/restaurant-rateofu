@@ -1,13 +1,21 @@
 import React from "react";
+import { useSelector } from "react-redux";
+
+import WSProvider from "components/WSProvider";
+import Auth from "components/Auth";
+import { isAuthenticatedSelector } from "store/selectors/staff.selector";
+
 import "./App.css";
 
-import Auth from "components/Auth";
-
 function App() {
+    const isAuthenticated = useSelector(isAuthenticatedSelector);
+
     return (
-        <div className="bg-gray-900 h-screen p-10">
-            <Auth />
-        </div>
+        <WSProvider>
+            <div className="bg-gray-900 h-screen p-10">
+                {!isAuthenticated ? <Auth /> : <div>Ola, senior!</div>}
+            </div>
+        </WSProvider>
     );
 }
 
