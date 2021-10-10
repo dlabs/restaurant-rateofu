@@ -39,11 +39,16 @@ export default function OrderDetails(props: Props) {
         <div>
             {orderSubmitted && (
                 <div className="text-center text-white text-lg">
-                    <img src="https://cdn2.iconfinder.com/data/icons/smooth-conceptual-vectors-3/95/186-512.png" alt="" />
+                    <img
+                        src="https://cdn2.iconfinder.com/data/icons/smooth-conceptual-vectors-3/95/186-512.png"
+                        alt=""
+                    />
                     <h3 className="">
                         Thank you for the order! We are working on it :)
                     </h3>
-                    <h4 className="mt-4">You can check your order summary below</h4>
+                    <h4 className="mt-4">
+                        You can check your order summary below
+                    </h4>
                 </div>
             )}
             <div className="flex items-center justify-center mt-20 pl-10 text-xl">
@@ -97,15 +102,18 @@ export default function OrderDetails(props: Props) {
                                             className="p-3 "
                                         >
                                             <span
-                                                className="text-gray-400 hover:text-gray-100 mr-2"
+                                                className="text-gray-400 hover:text-gray-100 mr-2 cursor-pointer"
                                                 onClick={() =>
                                                     onAddItem(
                                                         orderItem.productId
                                                     )
                                                 }
                                             >
-                                                <i className="material-icons-outlined text-base">
+                                                {/* <i className="material-icons-outlined text-base">
                                                     +
+                                                </i> */}
+                                                <i className="material-icons select-none">
+                                                    add_circle
                                                 </i>
                                             </span>
                                             <span
@@ -114,10 +122,10 @@ export default function OrderDetails(props: Props) {
                                                         orderItem.productId
                                                     )
                                                 }
-                                                className="text-gray-400 hover:text-gray-100  mx-2"
+                                                className="text-gray-400 hover:text-gray-100 mx-2 cursor-pointer"
                                             >
-                                                <i className="material-icons-outlined text-base">
-                                                    -
+                                                <i className="material-icons select-none">
+                                                    remove_circle
                                                 </i>
                                             </span>
                                             <span
@@ -126,10 +134,10 @@ export default function OrderDetails(props: Props) {
                                                         orderItem.productId
                                                     )
                                                 }
-                                                className="text-gray-400 hover:text-gray-100  ml-2"
+                                                className="text-gray-400 hover:text-gray-100 ml-2 cursor-pointer"
                                             >
-                                                <i className="material-icons-round text-base">
-                                                    x
+                                                <i className="material-icons select-none">
+                                                    delete
                                                 </i>
                                             </span>
                                         </td>

@@ -93,7 +93,7 @@ function App() {
                 Welcome to The Restaurant at the End of the Universe!
             </h1>
             <div className="text-center text-4xl text-white pt-8">
-                <h3>Your table number: {tableNo}</h3>
+                <h3 style={{fontFamily: 'Tourney'}}>TABLE {tableNo}</h3>
             </div>
 
             <div className="p-10 flex">

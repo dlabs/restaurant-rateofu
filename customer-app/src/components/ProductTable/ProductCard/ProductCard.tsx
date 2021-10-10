@@ -10,23 +10,31 @@ type Props = {
 };
 
 const getIconByProductType = (type: string) => {
-    return type === 'drink' ? 'local_bar' : 'lunch_dining';
-}
+    return type === "drink" ? "local_bar" : "lunch_dining";
+};
 
 export default function ProductCard(props: Props) {
     const { product, onAddToCard } = props;
-    const { name, type, displayPrice, imageUrl = 'https://s-media-cache-ak0.pinimg.com/736x/49/80/6f/49806f3f1c7483093855ebca1b8ae2c4.jpg' } = product;
+    const {
+        name,
+        type,
+        displayPrice,
+        imageUrl = "https://s-media-cache-ak0.pinimg.com/736x/49/80/6f/49806f3f1c7483093855ebca1b8ae2c4.jpg",
+    } = product;
     const productIcon = getIconByProductType(type);
 
     return (
         <div className={styles.wrapper}>
             <div className={styles.container}>
-                <div className={styles.top} style={{backgroundImage: `url(${imageUrl})`}}>
-                    <span className={styles.productPrice}>
-                        { displayPrice }
-                    </span>
-                    <span className={styles.productIcon}>
-                        <i className="material-icons">{ productIcon }</i>
+                <div
+                    className={styles.top}
+                    style={{
+                        backgroundImage: `url(${imageUrl}) `,
+                    }}
+                >
+                    <span className={`${styles.productPrice} neon text-white`}>{displayPrice}</span>
+                    <span className={`${styles.productIcon} neon text-white`}>
+                        <i className="material-icons">{productIcon}</i>
                     </span>
                 </div>
                 <div className={styles.bottom}>
@@ -34,8 +42,11 @@ export default function ProductCard(props: Props) {
                         <div className={styles.details}>
                             <h3>{name}</h3>
                         </div>
-                        <div className={styles.buy} onClick={() => onAddToCard(product)}>
-                            <i className="material-icons">add_shopping_cart</i>
+                        <div
+                            className={styles.buy}
+                            onClick={() => onAddToCard(product)}
+                        >
+                            <i className="material-icons select-none">add_shopping_cart</i>
                         </div>
                     </div>
                     <div className={styles.right}>
