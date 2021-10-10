@@ -5,6 +5,7 @@ import { StaffRoles } from "../../components/Auth/staff-roles.enum";
 
 interface StaffState {
     accessToken: string | null;
+    role: StaffRoles | null;
 }
 
 interface ServerEvent {
@@ -12,7 +13,7 @@ interface ServerEvent {
     payload: object;
 }
 
-const initialState: StaffState = { accessToken: null };
+const initialState: StaffState = { accessToken: null, role: null };
 
 interface AuthRequestModel {
     name: string;
@@ -50,6 +51,7 @@ const staffSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(authenticate.fulfilled, (state, action) => {
             state.accessToken = action.payload.accessToken;
+            state.role = action.meta.arg.role;
         });
     },
 });
