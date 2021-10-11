@@ -12,6 +12,8 @@ function App() {
     // * Shortcut: Table no is generated randomly; Maybe add table management later;
     const [tableNo] = useState(Math.floor(Math.random() * (18 - 1) + 1));
     const [orderSubmitted, setOrderSubmitted] = useState(false);
+    // * Necessary for debounce
+    const [orderRequestPending, setOrderRequestPending] = useState(false);
 
     const onAddProductToCard = (product: ProductModel) => {
         const newOrderItems = [...orderItems];
@@ -38,6 +40,7 @@ function App() {
         tableNo: number
     ) => {
         try {
+            setOrderRequestPending(true);
             await submitOrder(
                 orderItems.map((oi) => ({
                     quantity: oi.quantity,
@@ -48,6 +51,8 @@ function App() {
             setOrderSubmitted(true);
         } catch (err) {
             // * Shortcut: error handling
+        } finally {
+            setOrderRequestPending(false);
         }
     };
 
@@ -58,7 +63,6 @@ function App() {
                 : oi
         );
 
-        console.log(orderItems);
         setOrderItems(newOrderItems);
     };
 
@@ -89,11 +93,14 @@ function App() {
 
     return (
         <div className="h-screen">
-            <h1 className="neon text-center text-4xl text-white pt-8 font-medium" style={{fontFamily: 'Tourney'}}>
+            <h1
+                className="neon text-center text-4xl text-white pt-8 font-medium"
+                style={{ fontFamily: "Tourney" }}
+            >
                 Welcome to The Restaurant at the End of the Universe!
             </h1>
             <div className="text-center text-4xl text-white pt-8">
-                <h3 style={{fontFamily: 'Tourney'}}>TABLE {tableNo}</h3>
+                <h3 style={{ fontFamily: "Tourney" }}>TABLE {tableNo}</h3>
             </div>
 
             <div className="p-10 flex">
@@ -114,6 +121,7 @@ function App() {
                                 onRemoveSingleItem={handleRemoveSingleItem}
                                 onSubmitOrder={handleSubmitOrder}
                                 orderSubmitted={orderSubmitted}
+                                orderRequestPending={orderRequestPending}
                             />
                         )}
                     </div>

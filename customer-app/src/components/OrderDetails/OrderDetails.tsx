@@ -9,6 +9,7 @@ type Props = {
     orderItems: OrderItemModel[];
     tableNo: number;
     orderSubmitted: boolean;
+    orderRequestPending: boolean;
     onAddItem: (id: number) => void;
     onDeleteItem: (id: number) => void;
     onRemoveSingleItem: (id: number) => void;
@@ -31,6 +32,7 @@ export default function OrderDetails(props: Props) {
         onRemoveSingleItem,
         onSubmitOrder,
         orderSubmitted,
+        orderRequestPending,
         tableNo,
     } = props;
     const totalAmount = getTotalAmount(orderItems);
@@ -154,11 +156,14 @@ export default function OrderDetails(props: Props) {
                         {!orderSubmitted && (
                             <button
                                 className="cpbtn raise"
+                                disabled={orderRequestPending}
                                 onClick={() =>
                                     onSubmitOrder(orderItems, tableNo)
                                 }
                             >
-                                Submit Order
+                                {orderRequestPending
+                                    ? "Processing..."
+                                    : "Submit Order"}
                             </button>
                         )}
                     </div>
