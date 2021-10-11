@@ -6,6 +6,13 @@ import { Repository } from 'typeorm';
 import { ConfigService } from 'src/config/config.service';
 import { EnvKeys } from 'src/config/env-keys.enum';
 import { StaffEntity } from 'src/database/entities/staff.entity';
+import { StaffStatus } from 'src/shared/enums/staff-status.enum';
+
+export interface WsEvent {
+    event: 'newOrder' | 'orderItemStatusChanged' | 'multipleOrderItemsStatusChanged' | 'orderCompleted' | 'batchReady';
+
+    payload: object;
+}
 
 @Injectable()
 export class WsConnectionService {
@@ -29,34 +36,50 @@ export class WsConnectionService {
     }
 
     public async unregisterConnection(connectionId: string) {
-        await this.wsConnectionRepository.delete({ connectionId });
-        // TODO: Consider setting staff status to not_on_duty here if no single conn remain
+        const targetConnection = await this.wsConnectionRepository.findOne({ connectionId });
+        await this.wsConnectionRepository.delete(targetConnection.id);
+
+        const noMoreConnections =
+            (await this.wsConnectionRepository.find({ where: { staffId: targetConnection.staffId } })).length === 0;
+
+        if (noMoreConnections) {
+            await this.staffRepository.update(targetConnection.staffId, { status: StaffStatus.NOT_ON_DUTY });
+        }
         return;
     }
 
     public async linkConnectionToStaff(connectionId: string, accessToken: string) {
         const targetStaff = await this.staffRepository.findOne({ accessToken });
         if (targetStaff) {
-            await this.wsConnectionRepository.update({ connectionId }, { staffId: targetStaff.id });
+            const asyncOperations = [this.wsConnectionRepository.update({ connectionId }, { staffId: targetStaff.id })];
+
+            if (targetStaff.status === StaffStatus.NOT_ON_DUTY)
+                asyncOperations.push(this.staffRepository.update(targetStaff.id, { status: StaffStatus.AVAILABLE }));
+
+            await Promise.all(asyncOperations);
         }
         return;
     }
 
-    public async sendMessageToSingleConnection(connectionId: string, payload: object) {
+    public async sendMessageToSingleStaffMember(staffId: number, wsEvent: WsEvent) {
+        const targetStaffConnections = await this.wsConnectionRepository.find({ staffId });
+
         // * Since we are operating in lambda context - it is okay to create new api instance per function invocation
         const awsGatewayApi = new ApiGatewayManagementApi({
             endpoint: this.configService.get(EnvKeys.AWS_API_GATEWAY_WS_ENDPOINT),
         });
 
-        return awsGatewayApi
-            .postToConnection({
-                ConnectionId: connectionId,
-                Data: Buffer.from(JSON.stringify(payload)),
-            })
-            .promise();
+        return targetStaffConnections.map((tsc) =>
+            awsGatewayApi
+                .postToConnection({
+                    ConnectionId: tsc.connectionId,
+                    Data: Buffer.from(JSON.stringify(wsEvent)),
+                })
+                .promise(),
+        );
     }
 
-    public async sendMessageToAllConnections(payload: object) {
+    public async sendMessageToAllConnections(wsEvent: WsEvent) {
         // * Since we are operating in lambda context - it is okay to create new api instance per function invocation
         const awsGatewayApi = new ApiGatewayManagementApi({
             endpoint: this.configService.get(EnvKeys.AWS_API_GATEWAY_WS_ENDPOINT),
@@ -68,7 +91,7 @@ export class WsConnectionService {
                 awsGatewayApi
                     .postToConnection({
                         ConnectionId: conn.connectionId,
-                        Data: Buffer.from(JSON.stringify(payload)),
+                        Data: Buffer.from(JSON.stringify(wsEvent)),
                     })
                     .promise(),
             ),

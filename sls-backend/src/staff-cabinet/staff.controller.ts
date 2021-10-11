@@ -18,7 +18,7 @@ export class StaffController {
         return this.staffService.getPendingOrders();
     }
 
-    @Patch('orders/:orderId/batches/:batchType')
+    @Post('orders/:orderId/batches/:batchType/serve')
     public async markBatchAsServed(
         @Param('orderId') orderId: number,
         @Param('batchType') batchType: ProductTypes,

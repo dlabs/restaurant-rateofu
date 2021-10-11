@@ -43,15 +43,16 @@ export class CustomerOrderService {
             ),
         );
 
-        const orderItems = await this.orderItemRepository.save(preparedOrderItems);
+        await this.orderItemRepository.save(preparedOrderItems);
+
+        const orderDataForStaff = await this.orderRepository.findOne(createdOrder.id, {
+            relations: ['orderItems', 'orderItems.product'],
+        });
 
         // * Notify staff applications via WS that new order has been created
         await this.wsConnectionService.sendMessageToAllConnections({
             event: 'newOrder',
-            payload: {
-                createdOrder,
-                orderItems,
-            },
+            payload: orderDataForStaff,
         });
 
         return { totalOrderAmount };

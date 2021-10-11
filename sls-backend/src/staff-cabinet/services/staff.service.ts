@@ -13,6 +13,7 @@ import { OrderItemEntity } from 'src/database/entities/order-item.entity';
 import { OrderItemStatus } from 'src/shared/enums/order-item-status.enum';
 import { ProductTypes } from 'src/shared/enums/product-types.enum';
 import { StaffRoles } from 'src/shared/enums/staff-roles.enum';
+import { WsConnectionService } from 'src/websockets/services/ws-connection.service';
 
 @Injectable()
 export class StaffService {
@@ -23,6 +24,7 @@ export class StaffService {
         private readonly orderRepository: Repository<OrderEntity>,
         @InjectRepository(OrderItemEntity)
         private readonly orderItemRepository: Repository<OrderItemEntity>,
+        private readonly wsService: WsConnectionService,
     ) {}
 
     public async authenticate({ name, role }: AuthRequest) {
@@ -71,10 +73,8 @@ export class StaffService {
             switch (data.newStatus) {
                 case OrderItemStatus.IN_PROCESS:
                     if (orderItem.status === OrderItemStatus.AWAITING) {
-                        console.dir('here');
                         await this.startWorkingOnItem(staffMember.id, orderItem.id);
                     } else {
-                        console.dir('else');
                         throw new BadRequestException('Item is not in awaiting state');
                     }
                     break;
@@ -108,17 +108,27 @@ export class StaffService {
         );
 
         // * Re-fetch updated order items & mark order as completed if all items were served
-        if (
-            (await this.orderItemRepository.find({ where: { orderId: data.orderId } })).every(
-                (oi) => oi.status === OrderItemStatus.SERVED,
-            )
-        ) {
-            await this.orderRepository.update(data.orderId, { isCompleted: true });
-            // TODO: Send ws event?
-        }
-        // TODO: Send ws event?
+        const allItemsHaveBeenServed: boolean = (await this.orderItemRepository.find({ where: { orderId: data.orderId } })).every(
+            (oi) => oi.status === OrderItemStatus.SERVED,
+        );
 
-        await this.staffRepository.update({ accessToken: data.accessToken }, { status: StaffStatus.AVAILABLE });
+        if (allItemsHaveBeenServed) {
+            await this.orderRepository.update(data.orderId, { isCompleted: true });
+            await this.wsService.sendMessageToAllConnections({
+                event: 'orderCompleted',
+                payload: { orderId: data.orderId },
+            });
+        } else {
+            await this.wsService.sendMessageToAllConnections({
+                event: 'multipleOrderItemsStatusChanged',
+                payload: targetBatchItems.map((tbi) => ({ orderItemId: tbi.id, newStatus: OrderItemStatus.SERVED })),
+            });
+        }
+
+        // * Currently waiters do not notify system when they are serving order;
+        // * They just need to notify the system when the order has been served;
+        // * The line below could be used if waiter availability tracking is required for automatic orders distribution;
+        // await this.staffRepository.update({ accessToken: data.accessToken }, { status: StaffStatus.AVAILABLE });
 
         return true;
     }
@@ -129,7 +139,10 @@ export class StaffService {
             this.staffRepository.update(staffId, { status: StaffStatus.BUSY }),
         ]);
 
-        // TODO: Send WS event to every staff to reflect item state change?
+        await this.wsService.sendMessageToAllConnections({
+            event: 'orderItemStatusChanged',
+            payload: { orderItemId: itemId, newStatus: OrderItemStatus.IN_PROCESS },
+        });
 
         return;
     }
@@ -137,12 +150,15 @@ export class StaffService {
     private async markItemAsReady(staffId: number, orderItem: OrderItemEntity) {
         await this.orderItemRepository.update(orderItem.id, { status: OrderItemStatus.READY, processedBy: null });
 
+        await this.wsService.sendMessageToAllConnections({
+            event: 'orderItemStatusChanged',
+            payload: { orderItemId: orderItem.id, newStatus: OrderItemStatus.READY },
+        });
+
         const allOrderItems = await this.orderItemRepository.find({
             where: { orderId: orderItem.orderId },
             relations: ['product'],
         });
-
-        // TODO: Send WS event to every staff to reflect item state change?
 
         // * Mark staff member as available if all his processed items were delivered
         if (allOrderItems.filter((oi) => oi.processedBy === staffId).length === 0) {
@@ -153,10 +169,28 @@ export class StaffService {
 
         if (productSpecificItems.every((item) => item.status === OrderItemStatus.READY)) {
             // * Batch ready, assign waiter
-            // TODO: Assign waiter
-            console.dir(`${orderItem.product.type} batch ready!`);
+            await this.assignWaiterToServeBatch({ orderId: orderItem.orderId, batchType: orderItem.product.type });
         }
 
         return;
+    }
+
+    private async assignWaiterToServeBatch({ orderId, batchType }: { orderId: number; batchType: ProductTypes }) {
+        const availableWaiters = await this.staffRepository.find({
+            where: { role: StaffRoles.WAITER, status: StaffStatus.AVAILABLE },
+        });
+
+        if (!availableWaiters.length) {
+            // ! Critical Error
+            console.error('Critical: no waiters available to serve batch of order items');
+            return false;
+        }
+
+        const assignedWaiter = availableWaiters[Math.floor(Math.random() * availableWaiters.length)];
+        await this.wsService.sendMessageToSingleStaffMember(assignedWaiter.id, {
+            event: 'batchReady',
+            payload: { orderId, batchType },
+        });
+        return true;
     }
 }
