@@ -37,7 +37,7 @@ export class StaffService {
 
         if (existingStaff) {
             await this.staffRepository.update(existingStaff.id, { status: StaffStatus.AVAILABLE });
-            return { accessToken: existingStaff.accessToken };
+            return { accessToken: existingStaff.accessToken, staffId: existingStaff.id };
         }
 
         const newStaff = await this.staffRepository.save({
@@ -47,7 +47,7 @@ export class StaffService {
             accessToken: nanoid(32),
         });
 
-        return { accessToken: newStaff.accessToken };
+        return { accessToken: newStaff.accessToken, staffId: newStaff.id };
     }
 
     public async getPendingOrders() {
