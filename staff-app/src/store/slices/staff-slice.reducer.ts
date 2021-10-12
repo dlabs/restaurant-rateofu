@@ -1,29 +1,44 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { OrderModel } from "api/api-models";
+import { AuthResponseModel, OrderItemStatus, OrderModel } from "api/api-models";
 
-import { auth, getPendingOrders } from "../../api/staff-api";
+import {
+    auth,
+    getPendingOrders,
+    updateOrderItemStatus,
+} from "../../api/staff-api";
 import { StaffRoles } from "../../components/Auth/staff-roles.enum";
 
 interface StaffState {
     accessToken: string | null;
+    staffId: number | null;
     role: StaffRoles | null;
     orders: OrderModel[];
 }
 
 interface ServerEvent {
     event: string; // * consider typing this strongly
-    payload: object;
+    payload: any;
 }
 
-const initialState: StaffState = { accessToken: null, role: null, orders: [] };
+const initialState: StaffState = {
+    accessToken: null,
+    role: null,
+    staffId: null,
+    orders: [],
+};
 
 interface AuthRequestModel {
     name: string;
     role: StaffRoles;
 }
-interface AuthResponseModel {
+
+interface UpdateOrderItemStatusRequest {
     accessToken: string;
+    orderId: number;
+    orderItemId: number;
+    newStatus: OrderItemStatus;
 }
+
 const authenticate = createAsyncThunk(
     "staff/authenticate",
     async (req: AuthRequestModel): Promise<AuthResponseModel> => {
@@ -36,6 +51,12 @@ const requestOrders = createAsyncThunk(
     async (): Promise<OrderModel[]> => getPendingOrders()
 );
 
+const executeOrderItemStatusUpdate = createAsyncThunk(
+    "staff/updateItem",
+    async (req: UpdateOrderItemStatusRequest): Promise<boolean> =>
+        updateOrderItemStatus(req)
+);
+
 const handleNewServerMessage = (
     state: StaffState,
     action: PayloadAction<ServerEvent>
@@ -45,7 +66,31 @@ const handleNewServerMessage = (
     // * Return new state to update changes
     switch (serverEvent.event) {
         case "newOrder":
-            return state;
+            const newOrders = [...state.orders];
+            newOrders.unshift(serverEvent.payload as OrderModel);
+            return { ...state, orders: newOrders };
+        case "orderItemStatusChanged":
+            const { orderItemId, newStatus } = serverEvent.payload;
+
+            const updatedOrders = state.orders.map((o) => {
+                if (o.orderItems.find((oi) => oi.id === orderItemId)) {
+                    return {
+                        ...o,
+                        orderItems: o.orderItems.map((oi) => {
+                            if (oi.id === orderItemId) {
+                                return {
+                                    ...oi,
+                                    status: newStatus,
+                                };
+                            }
+                            return oi;
+                        }),
+                    };
+                }
+                return o;
+            });
+
+            return { ...state, orders: updatedOrders };
     }
 };
 
@@ -58,6 +103,7 @@ const staffSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(authenticate.fulfilled, (state, action) => {
             state.accessToken = action.payload.accessToken;
+            state.staffId = action.payload.staffId;
             state.role = action.meta.arg.role;
         });
         builder.addCase(requestOrders.fulfilled, (state, action) => {
@@ -69,4 +115,9 @@ const staffSlice = createSlice({
 const { onServerMessage } = staffSlice.actions;
 
 export default staffSlice.reducer;
-export { authenticate, onServerMessage, requestOrders };
+export {
+    authenticate,
+    onServerMessage,
+    requestOrders,
+    executeOrderItemStatusUpdate,
+};

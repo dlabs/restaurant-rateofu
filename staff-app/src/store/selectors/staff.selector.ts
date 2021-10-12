@@ -9,3 +9,5 @@ export const isAuthenticatedSelector = createSelector(
     (accessToken) => !!accessToken
 );
 export const ordersSelector = (state: RootState) => state.staffReducer.orders;
+
+export const staffIdSelector = (state: RootState) => state.staffReducer.staffId;

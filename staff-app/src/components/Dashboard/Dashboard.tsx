@@ -14,7 +14,14 @@ export default function Dashboard() {
         dispatch(requestOrders());
     }, [dispatch]);
 
-    return (
+    return orders.length === 0 ? (
+        <div className="text-center">
+            <div
+                className="spinner icon-spinner-3 spinner-xl"
+                aria-hidden="true"
+            ></div>
+        </div>
+    ) : (
         <div className="container mx-auto">
             <h2 className="text-center text-6xl mb-8 text-white">ORDERS</h2>
             {orders.map((o) => (
@@ -86,8 +93,16 @@ export default function Dashboard() {
                                                     {o.orderItems.length}
                                                 </p>
                                             </div>
-                                            <span className="flex-no-shrink bg-blue-400 px-5 ml-4 py-2 text-xs shadow-sm hover:shadow-lg font-medium tracking-wider text-white rounded-full">
-                                                IN PROCESS
+                                            <span
+                                                className={`flex-no-shrink px-5 ml-4 py-2 text-xs shadow-sm hover:shadow-lg font-medium tracking-wider text-white rounded-full ${
+                                                    o.isCompleted
+                                                        ? "bg-green-600"
+                                                        : "bg-blue-800"
+                                                }`}
+                                            >
+                                                {o.isCompleted
+                                                    ? "COMPLETED"
+                                                    : "IN PROCESS"}
                                             </span>
                                         </div>
                                     </div>

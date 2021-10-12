@@ -7,6 +7,7 @@ export enum OrderItemStatus {
 
 export interface AuthResponseModel {
     accessToken: string;
+    staffId: number;
 }
 
 export interface ProductModel {

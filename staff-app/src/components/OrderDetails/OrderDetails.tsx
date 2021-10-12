@@ -1,3 +1,4 @@
+import OrderItemAction from "components/OrderItemAction";
 import React from "react";
 
 import { OrderItemModel, OrderItemStatus } from "../../api/api-models";
@@ -50,7 +51,7 @@ export default function OrderDetails(props: Props) {
                                     <th className="p-3 text-left">Price</th>
                                     <th className="p-3 text-left">Type</th>
                                     <th className="p-3 text-left">Status</th>
-                                    <th className="p-3 text-left">Actions</th>
+                                    <th className="p-3 text-left">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -110,36 +111,9 @@ export default function OrderDetails(props: Props) {
                                             </span>
                                         </td>
                                         <td className="p-3 ">
-                                            <span
-                                                className="text-gray-400 hover:text-gray-100 mr-2 cursor-pointer"
-                                                onClick={() =>
-                                                    console.dir("clicked")
-                                                }
-                                            >
-                                                <i className="material-icons select-none">
-                                                    add_circle
-                                                </i>
-                                            </span>
-                                            <span
-                                                onClick={() =>
-                                                    console.dir("clicked")
-                                                }
-                                                className="text-gray-400 hover:text-gray-100 mx-2 cursor-pointer"
-                                            >
-                                                <i className="material-icons select-none">
-                                                    remove_circle
-                                                </i>
-                                            </span>
-                                            <span
-                                                onClick={() =>
-                                                    console.dir("clicked")
-                                                }
-                                                className="text-gray-400 hover:text-gray-100 ml-2 cursor-pointer"
-                                            >
-                                                <i className="material-icons select-none">
-                                                    delete
-                                                </i>
-                                            </span>
+                                            <OrderItemAction
+                                                orderItem={orderItem}
+                                            />
                                         </td>
                                     </tr>
                                 ))}
