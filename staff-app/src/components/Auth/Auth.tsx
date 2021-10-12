@@ -11,7 +11,7 @@ export default function Auth() {
     const [isLoaded, setIsLoaded] = useState(false);
     const [roles, setRoles] = useState<StaffRoles[]>([]);
     const [name, setName] = useState("");
-    const [selectedRole, setSelectedRole] = useState<StaffRoles>();
+    const [selectedRole, setSelectedRole] = useState<StaffRoles>(StaffRoles.BARTENDER);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
@@ -57,6 +57,7 @@ export default function Auth() {
                             onChange={(e) =>
                                 setSelectedRole(e.target.value as StaffRoles)
                             }
+                            
                         >
                             {roles.map((role) => (
                                 <option key={role} value={role}>
