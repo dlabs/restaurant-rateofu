@@ -43,7 +43,7 @@ export default function OrderDetails(props: Props) {
                 <div className="text-center text-white text-lg">
                     <img
                         src="https://cdn2.iconfinder.com/data/icons/smooth-conceptual-vectors-3/95/186-512.png"
-                        alt=""
+                        alt="order submitted"
                     />
                     <h3 className="">
                         Thank you for the order! We are working on it :)
@@ -83,6 +83,7 @@ export default function OrderDetails(props: Props) {
                                                         orderItem.imageUrl ||
                                                         "https://s-media-cache-ak0.pinimg.com/736x/49/80/6f/49806f3f1c7483093855ebca1b8ae2c4.jpg"
                                                     }
+                                                    alt="product img"
                                                 />
                                                 <div className="ml-3">
                                                     <div className="">
