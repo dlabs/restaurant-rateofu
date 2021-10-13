@@ -7,9 +7,10 @@ import { AppModule } from './app.module';
 let server: Handler;
 
 async function bootstrap(): Promise<Handler> {
-    const app = await NestFactory.create(AppModule);
+    const app = await NestFactory.create(AppModule, { cors: true });
     await app.init();
     app.useGlobalPipes(new ValidationPipe());
+    app.enableCors();
 
     const expressApp = app.getHttpAdapter().getInstance();
     return serverlessExpress({ app: expressApp });
