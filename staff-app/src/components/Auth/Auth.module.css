@@ -1,0 +1,102 @@
+* {
+    box-sizing: border-box;
+  }
+  
+  .form {
+    margin: 50px auto;
+    position: relative;
+    transform-style: preserve-3d;
+    width: 538px;
+  }
+
+  .frontSignIn {
+    display: flex;
+  }
+  
+  .form input[type="text"] {
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    background-color: #f5f6f7;
+    -moz-box-shadow: 0 1px #fff, inset 0 2px 2px rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: 0 1px #fff, inset 0 2px 2px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px #fff, inset 0 2px 2px rgba(0, 0, 0, 0.1);
+    border: 1px solid #b1b3b8;
+    font-size: 18px;
+    height: 57px;
+    margin-left: 12px;
+    padding-left: 12px;
+    width: 248px;
+  }
+  .form  input[type="text"]:focus {
+    outline: none;
+  }
+  
+  .form input[type="submit"] {
+    -moz-border-radius: 0 4px 4px 0;
+    -webkit-border-radius: 0;
+    border-radius: 0 4px 4px 0;
+    background-color: #f60;
+    border: 0;
+    -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+    color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    height: 52px;
+    padding: 0 12px;
+    position: absolute;
+    text-transform: uppercase;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.54);
+    z-index: -1;
+  }
+  
+  .signinSubmit {
+    right: -52px;
+  }
+  
+.select select {
+    /* Reset Select */
+    appearance: none;
+    outline: 0;
+    border: 0;
+    box-shadow: none;
+    /* Personalize */
+    flex: 1;
+    padding: 0 1em;
+    color: #fff;
+    background-color: #2c3e50;
+    background-image: none;
+    cursor: pointer;
+  }
+  /* Remove IE arrow */
+  .select select::-ms-expand {
+    display: none;
+  }
+  /* Custom Select wrapper */
+  .select {
+    position: relative;
+    display: flex;
+    width: 20em;
+    height: 52px;
+    padding: 0 12px;
+    border-radius: .25em;
+    overflow: hidden;
+  }
+  /* Arrow */
+  .select::after {
+    content: '\25BC';
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 1em;
+    background-color: #34495e;
+    transition: .25s all ease;
+    pointer-events: none;
+  }
+  /* Transition */
+  .select:hover::after {
+    color: #f39c12;
+  }
