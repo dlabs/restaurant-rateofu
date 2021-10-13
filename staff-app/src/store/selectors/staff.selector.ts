@@ -11,3 +11,6 @@ export const isAuthenticatedSelector = createSelector(
 export const ordersSelector = (state: RootState) => state.staffReducer.orders;
 
 export const staffIdSelector = (state: RootState) => state.staffReducer.staffId;
+
+export const batchesToBeServedSelector = (state: RootState) =>
+    state.staffReducer.batchesToBeServed;

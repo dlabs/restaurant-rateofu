@@ -112,16 +112,16 @@ export class StaffService {
             (oi) => oi.status === OrderItemStatus.SERVED,
         );
 
+        await this.wsService.sendMessageToAllConnections({
+            event: 'multipleOrderItemsStatusChanged',
+            payload: targetBatchItems.map((tbi) => ({ orderItemId: tbi.id, newStatus: OrderItemStatus.SERVED, processedBy: null })),
+        });
+
         if (allItemsHaveBeenServed) {
             await this.orderRepository.update(data.orderId, { isCompleted: true });
             await this.wsService.sendMessageToAllConnections({
                 event: 'orderCompleted',
                 payload: { orderId: data.orderId },
-            });
-        } else {
-            await this.wsService.sendMessageToAllConnections({
-                event: 'multipleOrderItemsStatusChanged',
-                payload: targetBatchItems.map((tbi) => ({ orderItemId: tbi.id, newStatus: OrderItemStatus.SERVED })),
             });
         }
 
@@ -141,7 +141,7 @@ export class StaffService {
 
         await this.wsService.sendMessageToAllConnections({
             event: 'orderItemStatusChanged',
-            payload: { orderItemId: itemId, newStatus: OrderItemStatus.IN_PROCESS },
+            payload: { orderItemId: itemId, newStatus: OrderItemStatus.IN_PROCESS, processedBy: staffId },
         });
 
         return;
@@ -152,7 +152,7 @@ export class StaffService {
 
         await this.wsService.sendMessageToAllConnections({
             event: 'orderItemStatusChanged',
-            payload: { orderItemId: orderItem.id, newStatus: OrderItemStatus.READY },
+            payload: { orderItemId: orderItem.id, newStatus: OrderItemStatus.READY, processedBy: null },
         });
 
         const allOrderItems = await this.orderItemRepository.find({

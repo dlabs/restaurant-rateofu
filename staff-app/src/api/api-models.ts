@@ -31,7 +31,7 @@ export interface OrderItemModel {
 
     status: OrderItemStatus;
 
-    processedBy: number;
+    processedBy: number | null;
 
     product: ProductModel;
 }
@@ -48,4 +48,19 @@ export interface OrderModel {
     createdAt: Date;
 
     orderItems: OrderItemModel[];
+}
+
+export interface ServeOrderBatchRequest {
+    orderId: number;
+
+    batchType: "drink" | "food";
+
+    accessToken: string;
+}
+
+export interface UpdateOrderItemStatusRequest {
+    accessToken: string;
+    orderId: number;
+    orderItemId: number;
+    newStatus: OrderItemStatus;
 }

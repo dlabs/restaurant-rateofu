@@ -56,7 +56,10 @@ export default function OrderDetails(props: Props) {
                             </thead>
                             <tbody>
                                 {orderItems.map((orderItem) => (
-                                    <tr className="bg-gray-800">
+                                    <tr
+                                        key={orderItem.id}
+                                        className="bg-gray-800"
+                                    >
                                         <td className="p-3">
                                             <div className="flex align-items-center">
                                                 <img
@@ -91,21 +94,21 @@ export default function OrderDetails(props: Props) {
                                             <span
                                                 className={`text-lg ${
                                                     statusInfo[orderItem.status]
-                                                        .colorClass
+                                                        ?.colorClass
                                                 }`}
                                             >
                                                 <i className="material-icons">
                                                     {
                                                         statusInfo[
                                                             orderItem.status
-                                                        ].icon
+                                                        ]?.icon
                                                     }
                                                 </i>
                                                 <span className="ml-2">
                                                     {
                                                         statusInfo[
                                                             orderItem.status
-                                                        ].text
+                                                        ]?.text
                                                     }
                                                 </span>
                                             </span>

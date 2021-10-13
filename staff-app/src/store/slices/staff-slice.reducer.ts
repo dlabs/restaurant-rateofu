@@ -1,9 +1,16 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AuthResponseModel, OrderItemStatus, OrderModel } from "api/api-models";
+import {
+    AuthResponseModel,
+    OrderItemStatus,
+    OrderModel,
+    ServeOrderBatchRequest,
+    UpdateOrderItemStatusRequest,
+} from "api/api-models";
 
 import {
     auth,
     getPendingOrders,
+    markOrderBatchAsServed,
     updateOrderItemStatus,
 } from "../../api/staff-api";
 import { StaffRoles } from "../../components/Auth/staff-roles.enum";
@@ -13,6 +20,13 @@ interface StaffState {
     staffId: number | null;
     role: StaffRoles | null;
     orders: OrderModel[];
+    batchesToBeServed: BatchToServe[];
+}
+
+interface BatchToServe {
+    orderId: number;
+
+    batchType: "drink" | "food";
 }
 
 interface ServerEvent {
@@ -25,18 +39,12 @@ const initialState: StaffState = {
     role: null,
     staffId: null,
     orders: [],
+    batchesToBeServed: [], // * This state field is for waiters only; There could be a better solution to this though;
 };
 
 interface AuthRequestModel {
     name: string;
     role: StaffRoles;
-}
-
-interface UpdateOrderItemStatusRequest {
-    accessToken: string;
-    orderId: number;
-    orderItemId: number;
-    newStatus: OrderItemStatus;
 }
 
 const authenticate = createAsyncThunk(
@@ -57,12 +65,17 @@ const executeOrderItemStatusUpdate = createAsyncThunk(
         updateOrderItemStatus(req)
 );
 
+const serveOrderBatch = createAsyncThunk(
+    "staff/serve",
+    async (req: ServeOrderBatchRequest): Promise<boolean> =>
+        markOrderBatchAsServed(req)
+);
+
 const handleNewServerMessage = (
     state: StaffState,
     action: PayloadAction<ServerEvent>
 ) => {
     const serverEvent = action.payload;
-    console.log(serverEvent);
     // * Return new state to update changes
     switch (serverEvent.event) {
         case "newOrder":
@@ -70,7 +83,7 @@ const handleNewServerMessage = (
             newOrders.unshift(serverEvent.payload as OrderModel);
             return { ...state, orders: newOrders };
         case "orderItemStatusChanged":
-            const { orderItemId, newStatus } = serverEvent.payload;
+            const { orderItemId, newStatus, processedBy } = serverEvent.payload;
 
             const updatedOrders = state.orders.map((o) => {
                 if (o.orderItems.find((oi) => oi.id === orderItemId)) {
@@ -81,6 +94,7 @@ const handleNewServerMessage = (
                                 return {
                                     ...oi,
                                     status: newStatus,
+                                    processedBy,
                                 };
                             }
                             return oi;
@@ -91,6 +105,56 @@ const handleNewServerMessage = (
             });
 
             return { ...state, orders: updatedOrders };
+        case "multipleOrderItemsStatusChanged":
+            const newUpdatedOrders = state.orders.map((o) => {
+                if (
+                    o.orderItems.find(
+                        (oi) => oi.id === serverEvent.payload[0].orderItemId
+                    )
+                ) {
+                    return {
+                        ...o,
+                        orderItems: o.orderItems.map((oi) => {
+                            const targetServerOrderItem: {
+                                orderItemId: number;
+                                newStatus: OrderItemStatus;
+                                processedBy: number | null;
+                            } = serverEvent.payload.find(
+                                (serverOi: {
+                                    orderItemId: number;
+                                    newStatus: OrderItemStatus;
+                                    processedBy: number | null;
+                                }) => serverOi.orderItemId === oi.id
+                            );
+                            if (targetServerOrderItem) {
+                                return {
+                                    ...oi,
+                                    status: targetServerOrderItem.newStatus,
+                                    processedBy:
+                                        targetServerOrderItem.processedBy,
+                                };
+                            }
+                            return oi;
+                        }),
+                    };
+                }
+                return o;
+            });
+            return { ...state, orders: newUpdatedOrders };
+        case "orderCompleted":
+            return {
+                ...state,
+                orders: state.orders.map((o) =>
+                    o.id === serverEvent.payload.orderId
+                        ? { ...o, isCompleted: true }
+                        : o
+                ),
+            };
+        case "batchReady":
+            // * Role check is not necessary (BE emits event only to Waiter WS connections)
+            const newBatchesToBeServed = [...state.batchesToBeServed];
+            newBatchesToBeServed.unshift(serverEvent.payload);
+            return { ...state, batchesToBeServed: newBatchesToBeServed };
     }
 };
 
@@ -109,6 +173,14 @@ const staffSlice = createSlice({
         builder.addCase(requestOrders.fulfilled, (state, action) => {
             state.orders = action.payload;
         });
+        builder.addCase(serveOrderBatch.fulfilled, (state, action) => {
+            const batchIdx = state.batchesToBeServed.findIndex(
+                (bts) =>
+                    bts.orderId === action.meta.arg.orderId &&
+                    bts.batchType === action.meta.arg.batchType
+            );
+            state.batchesToBeServed.splice(batchIdx, 1);
+        });
     },
 });
 
@@ -120,4 +192,5 @@ export {
     onServerMessage,
     requestOrders,
     executeOrderItemStatusUpdate,
+    serveOrderBatch,
 };

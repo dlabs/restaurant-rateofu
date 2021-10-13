@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import { useAppDispatch } from "store";
 import { useSelector } from "react-redux";
 import { ordersSelector } from "store/selectors/staff.selector";
+import WaiterActions from "components/WaiterActions";
 
 export default function Dashboard() {
     const orders = useSelector(ordersSelector);
@@ -26,7 +27,7 @@ export default function Dashboard() {
             <h2 className="text-center text-6xl mb-8 text-white">ORDERS</h2>
             {orders.map((o) => (
                 <div
-                    className="text-center border-2 border-green-400 rounded-lg"
+                    className="text-center border-2 border-green-400 rounded-lg mb-4"
                     key={o.id}
                 >
                     <div className="max-w-3xl w-full mx-auto z-10">
@@ -107,6 +108,7 @@ export default function Dashboard() {
                                         </div>
                                     </div>
                                 </div>
+                                <WaiterActions orderId={o.id} />
                             </div>
                         </div>
                     </div>
