@@ -51,7 +51,11 @@ export class StaffService {
     }
 
     public async getPendingOrders() {
-        return this.orderRepository.find({ where: { isCompleted: false }, relations: ['orderItems', 'orderItems.product'] });
+        return this.orderRepository.find({
+            where: { isCompleted: false },
+            relations: ['orderItems', 'orderItems.product'],
+            order: { createdAt: 'DESC' },
+        });
     }
 
     public async verifyAndUpdateItemStatus(data: UpdateItemStatusRequest & { orderId: number; itemId: number }) {
@@ -114,7 +118,11 @@ export class StaffService {
 
         await this.wsService.sendMessageToAllConnections({
             event: 'multipleOrderItemsStatusChanged',
-            payload: targetBatchItems.map((tbi) => ({ orderItemId: tbi.id, newStatus: OrderItemStatus.SERVED, processedBy: null })),
+            payload: targetBatchItems.map((tbi) => ({
+                orderItemId: tbi.id,
+                newStatus: OrderItemStatus.SERVED,
+                processedBy: null,
+            })),
         });
 
         if (allItemsHaveBeenServed) {

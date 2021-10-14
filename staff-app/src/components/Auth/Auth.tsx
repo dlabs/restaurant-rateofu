@@ -49,6 +49,7 @@ export default function Auth() {
                 <div className={styles.frontSignIn}>
                     <input
                         type="text"
+                        className="text-black"
                         placeholder="Name"
                         onChange={(e) => setName(e.target.value)}
                     />
