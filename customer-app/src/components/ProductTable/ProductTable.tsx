@@ -6,7 +6,7 @@ import { getAvailableProducts } from "api/customer-api";
 
 type Props = {
     onAddProductToCard: (product: ProductModel) => void;
-}
+};
 
 export default function ProductTable(props: Props) {
     const { onAddProductToCard } = props;
@@ -27,13 +27,23 @@ export default function ProductTable(props: Props) {
         loadProducts();
     }, []);
 
-    if (!isLoaded) return <div>Loading...</div>;
+    if (!isLoaded)
+        return (
+            <div
+                className="spinner icon-spinner-3 spinner-lg text-center"
+                aria-hidden="true"
+            ></div>
+        );
 
     return (
         <div className="flex justify-center">
             <div className="grid grid-cols-4 gap-12">
                 {products.map((product) => (
-                    <ProductCard key={product.id} product={product} onAddToCard={onAddProductToCard} />
+                    <ProductCard
+                        key={product.id}
+                        product={product}
+                        onAddToCard={onAddProductToCard}
+                    />
                 ))}
             </div>
         </div>
