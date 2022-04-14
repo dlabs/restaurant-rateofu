@@ -7,8 +7,9 @@
   "license": "N/A",
   "scripts": {
     "build": "tsc",
-    "build:watch": "ts-node-dev --respawn --transpile-only index.ts",
+    "build:watch": "ts-node-dev --respawn --transpile-only src/app.ts",
     "lint": "eslint . --ext .ts",
+    "start": "node dist/src/app.js",
     "test": "jest",
     "test:debug": "jest --inspect-brk",
     "test:watch": "jest --watchAll"
