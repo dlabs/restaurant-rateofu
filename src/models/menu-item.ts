@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose';
 const { String, Number } = Schema.Types;
 
-interface IMenuItem {
+export interface IMenuItem {
     itemTitle: string;
     itemPrice: number;
     itemDescription: string;
