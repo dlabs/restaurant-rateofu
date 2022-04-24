@@ -1,11 +1,13 @@
 import express from 'express';
 import cors from 'cors';
+import bearerToken from 'express-bearer-token';
+import { defaultErrorHandler } from './middleware/error-handling';
 
 import connectToDB from './db/connect';
 
 import menuItemsRouter from './routes/menu-items';
 import ordersRouter from './routes/orders';
-import { defaultErrorHandler } from './middleware/error-handling';
+import loginRouter from './routes/login';
 
 async function startServer(): Promise<void> {
     await connectToDB();
@@ -15,11 +17,13 @@ async function startServer(): Promise<void> {
 
     // Middlewares
     app.use(express.json());
+    app.use(bearerToken());
     app.use(cors({ origin: '*' }));
 
     // Routers
     app.use('/api/menu-items', menuItemsRouter);
     app.use('/api/orders/', ordersRouter);
+    app.use('/api/login/', loginRouter);
 
     // Error handling must go at the end of declared middlewares
     app.use(defaultErrorHandler);
