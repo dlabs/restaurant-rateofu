@@ -36,7 +36,7 @@
     <script src="https://unpkg.com/vue-router@3.5.3/dist/vue-router.js"></script>
 
     <script type="text/javascript">
-        const BASE_URL = 'http://localhost:8082/';
+        const BASE_URL = 'http://localhost:3000/';
 
         axios.defaults.baseURL = BASE_URL;
 
@@ -51,22 +51,22 @@
 
             toData() {
                 return {
-                    'order_id': this.orderId,
-                    'table_id': this.tableId,
-                    'order_items': this.orderItems.map(i => i.toData())
+                    '_id': this.orderId,
+                    'tableId': this.tableId,
+                    'orderItems': this.orderItems.map(i => i.toData())
                 };
             }
 
             static fromData(data) {
                 let items = [];
 
-                if ('order_items' in data) {
-                    items = data['order_items'].map(OrderItem.fromData);
+                if ('orderItems' in data) {
+                    items = data['orderItems'].map(OrderItem.fromData);
                 }
 
                 return new Order(
-                    data['order_id'],
-                    data['table_id'],
+                    data['_id'],
+                    data['tableId'],
                     items
                 );
             }
@@ -93,17 +93,17 @@
 
             toData() {
                 return {
-                    'order_item_id': this.order_item_id,
-                    'item_id': this.order_id,
-                    'status': this.status
+                    '_id': this.orderItemId,
+                    'itemId': this.itemId,
+                    'itemStatus': this.status
                 };
             }
 
             static fromData(data) {
                 return new OrderItem(
-                    data['order_item_id'],
-                    data['item_id'],
-                    data['status']
+                    data['_id'],
+                    data['itemId'],
+                    data['itemStatus']
                 );
             }
         }
@@ -120,12 +120,12 @@
 
             static fromData(data) {
                 return new MenuItem(
-                    data.item_id,
-                    data.item_title,
-                    data.item_price,
-                    data.item_description,
-                    data.item_type,
-                    data.item_image
+                    data._id,
+                    data.itemTitle,
+                    data.itemPrice,
+                    data.itemDescription,
+                    data.itemType,
+                    data.itemImage
                 );
             }
         }
@@ -145,7 +145,7 @@
 
                     if (response.status == 200) {
                         this.isLoggedIn = true;
-                        axiosClient.defaults.headers.common['Authorization'] = `Bearer ${response.data['bearer_token']}`;
+                        axiosClient.defaults.headers.common['Authorization'] = `Bearer ${response.data['bearerToken']}`;
                     } else {
                         this.isLoggedIn = false;
                         delete axiosClient.defaults.headers.common['Authorization'];
