@@ -1,10 +1,12 @@
-import { Schema, model } from 'mongoose';
+import mongoose, { Schema, model } from 'mongoose';
 const { String, ObjectId } = Schema.Types;
 
 export interface IOrderItem {
-    itemId: string;
+    itemId: mongoose.Types.ObjectId;
     itemStatus: 'ordered' | 'preparing' | 'ready_to_serve' | 'served';
 }
+
+export type OrderItemWithID = IOrderItem & { _id: string };
 
 export const OrderItemSchema = new Schema<IOrderItem>({
     itemId: { type: ObjectId, required: true },
@@ -15,5 +17,5 @@ export const OrderItemSchema = new Schema<IOrderItem>({
     },
 });
 
-const OrderItem = model<IOrderItem>('Order', OrderItemSchema);
+const OrderItem = model<IOrderItem>('Order Item', OrderItemSchema);
 export default OrderItem;

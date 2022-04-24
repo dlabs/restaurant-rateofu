@@ -1,12 +1,14 @@
-import { Schema, model } from 'mongoose';
+import mongoose, { Schema, model } from 'mongoose';
 const { String, Number } = Schema.Types;
 import { IOrderItem, OrderItemSchema } from './order-item';
 
-interface IOrder {
+export interface IOrder {
     tableId: string;
     orderTotal: number;
     orderItems: IOrderItem[];
 }
+
+export type OrderWithID = IOrder & { _id: mongoose.Types.ObjectId };
 
 const OrderSchema = new Schema<IOrder>({
     tableId: { type: String, required: true },

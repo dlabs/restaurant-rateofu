@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import { getAllMenuItemsController } from '../controllers/menu-items';
 
-const router = Router();
+const menuItemsRouter = Router();
 
-router.get('/', getAllMenuItemsController);
+menuItemsRouter.get('/', getAllMenuItemsController);
 
-export default router;
+export default menuItemsRouter;

@@ -4,6 +4,7 @@ import cors from 'cors';
 import connectToDB from './db/connect';
 
 import menuItemsRouter from './routes/menu-items';
+import ordersRouter from './routes/orders';
 import { defaultErrorHandler } from './middleware/error-handling';
 
 async function startServer(): Promise<void> {
@@ -18,6 +19,7 @@ async function startServer(): Promise<void> {
 
     // Routers
     app.use('/api/menu-items', menuItemsRouter);
+    app.use('/api/orders/', ordersRouter);
 
     // Error handling must go at the end of declared middlewares
     app.use(defaultErrorHandler);
