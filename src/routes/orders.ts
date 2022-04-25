@@ -4,6 +4,7 @@ import {
     getOrderByIdController,
     getOrdersByFinishedItemsController,
 } from '../controllers/orders';
+import { checkToken } from '../middleware/auth';
 
 const ordersRouter = Router();
 
@@ -17,6 +18,7 @@ ordersRouter.use((req, res, next) => {
     req.query[unfinishedItemsKey] = req.query[unfinishedItemsKey] ?? 'true';
     next();
 });
+ordersRouter.use(checkToken);
 ordersRouter.get('/', getOrdersByFinishedItemsController);
 
 export default ordersRouter;
