@@ -21,7 +21,7 @@ async function startServer(): Promise<void> {
     app.use(cors({ origin: '*' }));
 
     // Routers
-    app.use('/api/menu-items', menuItemsRouter);
+    app.use('/api/menu-items/', menuItemsRouter);
     app.use('/api/orders/', ordersRouter);
     app.use('/api/login/', loginRouter);
 

@@ -85,3 +85,25 @@ export async function getOrderById(id: string): Promise<IOrder | undefined> {
     const order = await Order.findById(id);
     return order;
 }
+
+/**
+ * Gets orders that either contain all finished items or still
+ * have undelivered order items.
+ * @param seeUnfinished If true, will return orderes with unfinished items,
+ *  else orders with finished items.
+ */
+export async function getOrdersByFinishedItems(
+    seeUnfinished: boolean
+): Promise<IOrder[]> {
+    const orders = await Order.find({
+        'orderItems.itemStatus': {
+            [seeUnfinished ? '$in' : '$nin']: [
+                'ordered',
+                'preparing',
+                'ready_to_serve',
+            ],
+        },
+    });
+
+    return orders;
+}

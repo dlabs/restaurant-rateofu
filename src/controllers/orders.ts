@@ -1,6 +1,10 @@
 import { RequestHandler } from 'express';
 import { IOrder } from '../models/order';
-import { addNewOrder, getOrderById } from '../services/orders';
+import {
+    addNewOrder,
+    getOrderById,
+    getOrdersByFinishedItems,
+} from '../services/orders';
 import { IOrderRequest } from '../types';
 
 /**
@@ -39,4 +43,16 @@ export async function getOrderByIdController(
     }
 
     res.status(200).send(order);
+}
+
+export async function getOrdersByFinishedItemsController(
+    req,
+    res
+): Promise<RequestHandler> {
+    const seeUnfinished =
+        req.query['has_unfinished_items'] === 'false' ? false : true;
+
+    const orders = await getOrdersByFinishedItems(seeUnfinished);
+
+    return res.status(200).send(orders);
 }
