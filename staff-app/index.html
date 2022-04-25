@@ -221,7 +221,11 @@
             }
 
             async update(orderItem) {
-                let response = await axiosClient.put(`/api/order-items/${orderItem.orderItemId}`, orderItem);
+                let response = await axiosClient.put(`/api/order-items/${orderItem.orderItemId}`, {
+                    '_id': orderItem.orderItemId,
+                    'itemId': orderItem.itemId,
+                    'itemStatus': orderItem.status
+                });
             }
 
             static appendMenuItem(orderItem, menuItemsMap) {

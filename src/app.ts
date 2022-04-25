@@ -6,6 +6,7 @@ import { defaultErrorHandler } from './middleware/error-handling';
 import connectToDB from './db/connect';
 
 import menuItemsRouter from './routes/menu-items';
+import orderItemRouter from './routes/order-items';
 import ordersRouter from './routes/orders';
 import loginRouter from './routes/login';
 
@@ -21,9 +22,10 @@ async function startServer(): Promise<void> {
     app.use(cors({ origin: '*' }));
 
     // Routers
-    app.use('/api/menu-items/', menuItemsRouter);
-    app.use('/api/orders/', ordersRouter);
     app.use('/api/login/', loginRouter);
+    app.use('/api/menu-items/', menuItemsRouter);
+    app.use('/api/order-items/', orderItemRouter);
+    app.use('/api/orders/', ordersRouter);
 
     // Error handling must go at the end of declared middlewares
     app.use(defaultErrorHandler);

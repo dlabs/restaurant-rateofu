@@ -6,7 +6,7 @@ export interface IOrderItem {
     itemStatus: 'ordered' | 'preparing' | 'ready_to_serve' | 'delivered';
 }
 
-export type OrderItemWithID = IOrderItem & { _id: string };
+export type OrderItemWithID = IOrderItem & { _id: mongoose.Types.ObjectId };
 
 export const OrderItemSchema = new Schema<IOrderItem>({
     itemId: { type: ObjectId, required: true },
