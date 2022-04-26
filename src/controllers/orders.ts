@@ -45,6 +45,12 @@ export async function getOrderByIdController(
     res.status(200).send(order);
 }
 
+/**
+ * Prepares a boolean to get finished or unfinished orders,
+ * then calls services to return the order from DB.
+ * @param req
+ * @param res
+ */
 export async function getOrdersByFinishedItemsController(
     req,
     res
