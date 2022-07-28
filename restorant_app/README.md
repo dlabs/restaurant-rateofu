@@ -10,3 +10,5 @@ Rails version: 7.0.3.1
   - bundle install
   
   - rails db:setup (seeds included)
+
+  - bundle exec rspec
