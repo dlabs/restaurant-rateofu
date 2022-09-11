@@ -13,7 +13,7 @@ def generate_bearer_token(length=6):
     - int length (default=6)
     Example or result: 'kfByOn'
     """
-    assert length > 6, 'parameter "length" must be 6 or higher'
+    assert length >= 6, 'parameter "length" must be 6 or higher'
 
     # generate random hash, with custom length
     len_all = len(ALL_CHARS_AND_DIGITS)
