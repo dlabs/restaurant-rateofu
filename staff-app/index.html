@@ -27,11 +27,14 @@
         <script src="https://unpkg.com/vue-router@3.0.0/dist/vue-router.js"></script>
 
         <script type="text/javascript">
-            const BASE_URL = 'http://localhost:8082/';
-
-            axios.defaults.baseURL = BASE_URL;
-
-            const axiosClient = axios.default;
+            const axiosClient = axios.create({
+                baseURL: 'http://0.0.0.0:105/',
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    "Access-Control-Allow-Origin": "*"
+                }
+            });
 
             class Order {
                 constructor(orderId, tableId, orderItems) {
@@ -287,13 +290,13 @@
                         <div class="col-sm-12">
                             <h2>The kitchen</h2>
                         </div>
-                        <div class="card w-100" v-if="orders" v-for="order in orders">
+                        <div class="card w-100" v-if="orders" v-for="(order, index) in orders" :key="index">
                             <div class="card-header">
                                 Order in work ({{ order.orderId }})
                             </div>
                             <div class="card-body">
                                 <ul id="stock" class="list-group list-group-flush">
-                                    <li v-for="orderItem in order.orderItems" class="list-group-item" v-if="orderItem.menuItem.itemType == 'food' && (orderItem.status === 'ordered' || orderItem.status === 'preparing')">
+                                    <li v-for="(orderItem, index) in order.orderItems" :key="index" class="list-group-item" v-if="orderItem.menuItem.itemType == 'food' && (orderItem.status === 'ordered' || orderItem.status === 'preparing')">
                                         <p>{{ orderItem.menuItem.itemTitle }}</p>
 
                                         <button v-if="orderItem.status === 'ordered'" class="form-control btn-primary" v-on:click="markItemAsPreparing(orderItem)">Start preparing</button>
@@ -352,13 +355,13 @@
                         <div class="col-sm-12">
                             <h2>The bar</h2>
                         </div>
-                        <div class="card w-100" v-if="orders" v-for="order in orders">
+                        <div class="card w-100" v-if="orders" v-for="(order, index) in orders" :key="index">
                             <div class="card-header">
                                 Order in work ({{ order.orderId }})
                             </div>
                             <div class="card-body">
                                 <ul id="stock" class="list-group list-group-flush">
-                                    <li v-for="orderItem in order.orderItems" class="list-group-item" v-if="orderItem.menuItem.itemType == 'drink' && (orderItem.status === 'ordered' || orderItem.status === 'preparing')">
+                                    <li v-for="(orderItem, index) in order.orderItems" :key="index" class="list-group-item" v-if="orderItem.menuItem.itemType == 'drink' && (orderItem.status === 'ordered' || orderItem.status === 'preparing')">
                                         <p>{{ orderItem.menuItem.itemTitle }}</p>
 
                                         <button v-if="orderItem.status === 'ordered'" class="form-control btn-primary" v-on:click="markItemAsPreparing(orderItem)">Start preparing</button>
@@ -417,13 +420,13 @@
                         <div class="col-sm-12">
                             <h2>Waiter</h2>
                         </div>
-                        <div class="card w-100" v-if="orders" v-for="order in orders">
+                        <div class="card w-100" v-if="orders" v-for="(order, index) in orders" :key="index">
                             <div class="card-header">
                                 Order in work ({{ order.orderId }})
                             </div>
                             <div class="card-body">
                                 <ul id="stock" class="list-group list-group-flush">
-                                    <li v-for="orderItem in order.orderItems" class="list-group-item" v-if="orderItem.status === 'ready_to_serve'">
+                                    <li v-for="(orderItem, index) in order.orderItems" :key="index" class="list-group-item" v-if="orderItem.status === 'ready_to_serve'">
                                         <p>{{ orderItem.menuItem.itemTitle }}</p>
 
                                         <button class="form-control btn-primary" v-on:click="markItemAsDelivered(orderItem)">Delivered</button>

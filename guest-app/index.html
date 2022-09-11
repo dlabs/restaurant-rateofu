@@ -26,11 +26,14 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script src="https://unpkg.com/vue-router@3.0.0/dist/vue-router.js"></script>
     <script type="text/javascript">
-        const BASE_URL = 'http://localhost:8081/';
-
-        axios.defaults.baseURL = BASE_URL;
-
-        const axiosClient = axios.default;
+        const axiosClient = axios.create({
+            baseURL: 'http://0.0.0.0:105/',
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "Access-Control-Allow-Origin": "*"
+            },
+        });
 
         class MenuItemService {
 
@@ -152,7 +155,7 @@
             props: ['item'],
             data() {
                 return {
-                    qty: 0
+                    qty: 1
                 };
             },
             template: `
@@ -172,7 +175,7 @@
             methods: {
                 add() {
                     this.$emit('add', this.item, this.qty);
-                    this.qty = 0;
+                    this.qty = 1;
                 }
             }
         });
@@ -212,7 +215,7 @@
                         };
                     });
 
-                    axios.post('/api/orders', {
+                    axiosClient.post('/api/orders', {
                         table_id: 'test-table',
                         items: itemsPayload
                     })
@@ -227,6 +230,7 @@
                 <div class="card-deck col-sm-12">
                     <menu-item 
                         v-for="menuItem in menuItems" 
+                        :key="menuItem.id"
                         v-bind:item="menuItem"
                         v-on:add="addToCart"
                     >
@@ -236,7 +240,7 @@
                 <div class="col-sm-12 mt-l mb-l">
                     <h2>Cart</h2>
                     <ul>
-                        <li v-for="cartItem in cart">{{ cartItem.qty }} x {{ cartItem.menuItem.itemTitle }}</li>
+                        <li v-for="(cartItem, index) in cart" :key="index">{{ cartItem.qty }} x {{ cartItem.menuItem.itemTitle }}</li>
                     </ul>
                     <button v-if="Object.keys(cart).length > 0" v-on:click="submit()" class="form-control btn-primary">Submit order</button>
                     <p v-if="Object.keys(cart).length == 0">Your cart is empty.</p>
@@ -277,7 +281,7 @@
                     <h2 v-if="order">Order #{{ order.orderId }}</h2>
 
                     <div class="card-deck" v-if="order">
-                        <div v-for="orderItem in order.orderItems" class="card">
+                        <div v-for="(orderItem, index) in order.orderItems" class="card" :key="index">
                             <img class="card-img-top" v-bind:src="orderItem.menuItem.itemImage">
                             <div class="card-body">
                                 <h5 class="card-title">{{ orderItem.menuItem.itemTitle }}</h5>
