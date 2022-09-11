@@ -2,6 +2,13 @@
 
 Frontend clients for guests and staff.
 
+## Setup the environment for server-app
+
+    cd server-app/
+    virtualenv venv
+    source venv/bin/activate
+    pip install -r requirements.txt
+
 ## Running
 
 Running both apps is simply if you have `make` and `python3` installed:
