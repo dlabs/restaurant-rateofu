@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, request
+from flask import Flask, request, jsonify, request, make_response
 from flask_cors import CORS
 from utils import generate_bearer_token, generate_id, ORDER_STAGES
 from menu import MENU
@@ -18,7 +18,10 @@ def get_menu_items():
 
 @app.route('/api/orders/<order_id>', methods=['GET'])
 def get_order_by_id(order_id):
-    return jsonify({})
+    if order_id in orders:
+        order = orders[order_id]
+        return jsonify(order)
+    return make_response("Order ID not found", 404)
 
 
 @app.route('/api/orders', methods=['POST', 'GET'])
