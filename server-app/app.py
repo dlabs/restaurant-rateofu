@@ -73,4 +73,11 @@ def login():
 
 @app.route('/api/order-items/<order_item_id>', methods=['PUT'])
 def update_order(order_item_id):
-    return jsonify({})
+    try:
+        for order in orders.values():
+            for item in order['order_items']:
+                if item['order_item_id'] == order_item_id:
+                    item['status'] = request.json['status']
+        return make_response("Success", 204)
+    except Exception:
+        return make_response("Order item ID not found", 404)
