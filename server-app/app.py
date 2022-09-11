@@ -1,12 +1,13 @@
 from flask import Flask, request, jsonify, request
 from flask_cors import CORS
-from utils import generate_bearer_token
+from utils import generate_bearer_token, generate_id, ORDER_STAGES
 from menu import MENU
 
 app = Flask(__name__)
 CORS(app)
 
 staff = {}
+orders = {}
 
 
 @app.route('/api/menu-items', methods=['GET'])
@@ -23,7 +24,26 @@ def get_order_by_id(order_id):
 @app.route('/api/orders', methods=['POST', 'GET'])
 def post_order():
     if request.method == 'POST':
-        return jsonify({})
+        # create new order
+        order = {
+            'order_id': generate_id(),
+            'table_id': request.json['table_id'],
+            'order_total': sum([item['quantity'] * MENU[item['item_id']]['item_price'] for item in request.json['items']]),
+            'order_items': [
+                {
+                    'order_item_id': generate_id(),
+                    'item_id': item['item_id'],
+                    'status': ORDER_STAGES[0],
+                    'quantity': item['quantity'],
+                    'type': MENU[item['item_id']]['item_type']
+                } for item in request.json['items']
+            ],
+        }
+        # save order
+        orders[order['order_id']] = order
+
+        return jsonify(order)
+
     elif request.method == 'GET':
         return jsonify({})
 
