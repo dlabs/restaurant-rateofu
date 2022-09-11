@@ -27,11 +27,14 @@
         <script src="https://unpkg.com/vue-router@3.0.0/dist/vue-router.js"></script>
 
         <script type="text/javascript">
-            const BASE_URL = 'http://localhost:8082/';
-
-            axios.defaults.baseURL = BASE_URL;
-
-            const axiosClient = axios.default;
+            const axiosClient = axios.create({
+                baseURL: 'http://0.0.0.0:105/',
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    "Access-Control-Allow-Origin": "*"
+                }
+            });
 
             class Order {
                 constructor(orderId, tableId, orderItems) {
