@@ -24,7 +24,7 @@ def get_order_by_id(order_id):
     return make_response("Order ID not found", 404)
 
 
-@app.route('/api/orders', methods=['POST', 'GET'])
+@app.route('/api/orders', methods=['POST'])
 def post_order():
     if request.method == 'POST':
         # create new order
@@ -49,6 +49,28 @@ def post_order():
 
     elif request.method == 'GET':
         return jsonify({})
+
+
+@app.route('/api/orders/', methods=['GET'])
+def get_order():
+    has_unfinished_items = request.args.get('has_unfinished_items', default=False, type=bool)
+    if (has_unfinished_items):
+        return jsonify([
+            {
+                'order_id': order['order_id'],
+                'table_id': order['table_id'],
+                'order_items': order['order_items']
+            } for order in orders.values()
+        ])
+    else:
+        orders_with_finished_items = []
+        for order in orders.values():
+            orders_with_finished_items.append({
+                'order_id': order['order_id'],
+                'table_id': order['table_id'],
+                'order_items': [item for item in order['order_items'] if item['status'] == ORDER_STAGES[-1]],
+            })
+        return jsonify(orders_with_finished_items)
 
 
 @app.route('/api/login', methods=['POST'])
