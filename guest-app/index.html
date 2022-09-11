@@ -155,7 +155,7 @@
             props: ['item'],
             data() {
                 return {
-                    qty: 0
+                    qty: 1
                 };
             },
             template: `
@@ -175,7 +175,7 @@
             methods: {
                 add() {
                     this.$emit('add', this.item, this.qty);
-                    this.qty = 0;
+                    this.qty = 1;
                 }
             }
         });
