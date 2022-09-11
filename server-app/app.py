@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify, request
 from flask_cors import CORS
-
+from menu import MENU
 
 app = Flask(__name__)
 CORS(app)
@@ -8,7 +8,8 @@ CORS(app)
 
 @app.route('/api/menu-items', methods=['GET'])
 def get_menu_items():
-    return jsonify({})
+    response = jsonify(list(MENU.values()))
+    return response
 
 
 @app.route('/api/orders/<order_id>', methods=['GET'])
