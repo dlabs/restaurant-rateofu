@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@nestjs/config": "^2.2.0",
+    "@types/jsonwebtoken": "^8.5.9",
+    "install": "^0.13.0",
+    "jsonwebtoken": "^8.5.1",
+    "npm": "^8.19.2"
+  }
+}
