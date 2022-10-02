@@ -20,6 +20,16 @@ import { MenuitemModule } from 'modules/menuitem/menuitem.module';
 })
 export class AppModule implements NestModule {
   configure(context: MiddlewareConsumer) {
-    context.apply(JwtMiddleware).exclude('api/login').forRoutes('*');
+    context
+      .apply(JwtMiddleware)
+      .exclude(
+        'api/login',
+        'api/menu-items',
+        'api/orders',
+        'api/orders(.*)',
+        'api/order-items',
+        'api/order-items(.*)',
+      )
+      .forRoutes('*');
   }
 }
