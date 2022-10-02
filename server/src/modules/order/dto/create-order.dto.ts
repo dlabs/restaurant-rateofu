@@ -1,6 +1,5 @@
 import { Type } from 'class-transformer';
 import { ArrayMinSize, IsArray, IsNotEmpty } from 'class-validator';
-import { OrderItem } from 'modules/orderitem/entities/orderitem.entity';
 
 export class CreateOrderOrderItemDto {
   item_id: string;
@@ -18,10 +17,16 @@ export class CreateOrderRequestDto {
   items: CreateOrderOrderItemDto[];
 }
 
+export class OrderItemDto {
+  order_item_id: string;
+  item_id: string;
+  status: string;
+}
+
 export class CreateOrderResponseDto {
   order_id: string;
 
   table_id: string;
 
-  order_items: OrderItem[];
+  order_items: OrderItemDto[];
 }

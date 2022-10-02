@@ -1,1 +1,3 @@
-export class CreateOrderitemDto {}
+export class CreateOrderItemRequestDto {}
+
+export class CreateOrderItemResponseDto {}

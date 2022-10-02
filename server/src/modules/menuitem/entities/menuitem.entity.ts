@@ -3,16 +3,22 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document } from 'mongoose';
 import { MenuItemType } from '../enum/menuitem.type';
 
-@Schema()
+@Schema({
+  versionKey: false,
+  timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' },
+})
 export class MenuItem extends BaseEntity {
-  @Prop({ type: mongoose.Schema.Types.String })
+  @Prop({ type: mongoose.Schema.Types.String, required: true })
   item_title: string;
 
-  @Prop({ type: mongoose.Schema.Types.String })
+  @Prop({ type: mongoose.Schema.Types.Number, required: true })
   item_price: number;
 
-  @Prop()
-  item_description: MenuItemType;
+  @Prop({ type: mongoose.Schema.Types.String })
+  item_description: string;
+
+  @Prop({ required: true })
+  item_type: MenuItemType;
 
   @Prop({ type: mongoose.Schema.Types.String })
   item_image: string;
