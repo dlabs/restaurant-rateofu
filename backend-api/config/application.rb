@@ -10,7 +10,8 @@ module BackendApi
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
-
+    Dir[Rails.root.join('app/enums/**/*.rb')].each{|rb| require rb}
+    Dir[Rails.root.join('app/serializers/**/*.rb')].each{|rb| require rb}
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files
