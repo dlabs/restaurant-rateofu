@@ -6,20 +6,6 @@ class MenuItemSerializer < ActiveModel::Serializer
 
   include Rails.application.routes.url_helpers
 
-  # GET /api/menu-items
-  # Example response payload
-  # [
-  #   {
-  #     "item_id": "e95321ac-f0d5-4009-8420-da8fc17c7731",
-  #     "item_title": "Example item",
-  #     "item_price": 29.25,
-  #     "item_description": "Example description",
-  #     "item_type": "food" | "drink",
-  #     "item_image": "https://miro.medium.com/max/699/1*UfV5sxZUkgyUQIyZf8Wzjg.png"
-  #   },
-  #   ...
-  # ]
-
   def item_id
     object.id
   end
