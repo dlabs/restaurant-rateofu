@@ -27,11 +27,11 @@
         <script src="https://unpkg.com/vue-router@3.0.0/dist/vue-router.js"></script>
 
         <script type="text/javascript">
-            const BASE_URL = 'http://localhost:8082/';
+            const BASE_URL = 'http://localhost:3000/';
 
             axios.defaults.baseURL = BASE_URL;
 
-            const axiosClient = axios.default;
+            const axiosClient = axios
 
             class Order {
                 constructor(orderId, tableId, orderItems) {
@@ -157,7 +157,7 @@
 
                 async fetchMenuItems() {
                     try {
-                        const response = await axiosClient.get('/api/menu-items');
+                        const response = await axiosClient.get('/api/menu_items');
                         return response.data.map(MenuItem.fromData);
                     } catch (err) {
                         console.log('Error fetching menu items', err);
@@ -212,7 +212,7 @@
                 }
 
                 async update(orderItem) {
-                    let response = await axiosClient.put(`/api/order-items/${orderItem.orderItemId}`, orderItem);
+                    let response = await axiosClient.put(`/api/order_items/${orderItem.orderItemId}`, orderItem);
                 }
 
                 static appendMenuItem(orderItem, menuItemsMap) {

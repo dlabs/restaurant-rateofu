@@ -26,17 +26,16 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script src="https://unpkg.com/vue-router@3.0.0/dist/vue-router.js"></script>
     <script type="text/javascript">
-        const BASE_URL = 'http://localhost:8081/';
-
+        const BASE_URL = 'http://localhost:3000/';
         axios.defaults.baseURL = BASE_URL;
 
-        const axiosClient = axios.default;
+        const axiosClient = axios;
 
         class MenuItemService {
 
             async fetchMenuItems() {
                 try {
-                    const response = await axiosClient.get('/api/menu-items');
+                    const response = await axiosClient.get('/api/menu_items');
                     return response.data.map(MenuItem.fromData);
                 } catch (err) {
                     console.log('Error fetching menu items', err);
@@ -213,7 +212,7 @@
                     });
 
                     axios.post('/api/orders', {
-                        table_id: 'test-table',
+                        table_id: '1',
                         items: itemsPayload
                     })
                     .then((response) => {
@@ -224,7 +223,7 @@
             },
             template: `
             <div>
-                <div class="card-deck col-sm-12">
+                <div class="card-deck grid-container col-sm-12">
                     <menu-item 
                         v-for="menuItem in menuItems" 
                         v-bind:item="menuItem"
@@ -276,7 +275,7 @@
                 <div>
                     <h2 v-if="order">Order #{{ order.orderId }}</h2>
 
-                    <div class="card-deck" v-if="order">
+                    <div class="card-deck grid-container" v-if="order">
                         <div v-for="orderItem in order.orderItems" class="card">
                             <img class="card-img-top" v-bind:src="orderItem.menuItem.itemImage">
                             <div class="card-body">
@@ -305,4 +304,12 @@
         });
     </script>
   </body>
+
+  <style>
+      .grid-container {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      }
+  </style>
+
 </html>
