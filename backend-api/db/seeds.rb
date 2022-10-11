@@ -22,7 +22,7 @@ menu_items.each do |item|
   a.description = item[:description]
   a.type = MenuItemFoodTypes[item[:type]]
   a.price = item[:price]
-  
+
   url = item[:url]
   filename = File.basename(URI.parse(url).path)
   file = URI.open(url)

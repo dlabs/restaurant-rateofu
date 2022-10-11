@@ -11,6 +11,8 @@ module Services
       end
 
       def call
+        return if @params.blank?
+
         ActiveRecord::Base.transaction do
           create_order
           create_order_items

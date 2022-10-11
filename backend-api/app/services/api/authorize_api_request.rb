@@ -2,7 +2,7 @@
 
 module Api
   class AuthorizeApiRequest
-    attr_reader :errors, :user
+    attr_reader :errors, :user, :headers
 
     def initialize(headers = {})
       @headers = headers
@@ -14,11 +14,9 @@ module Api
 
     private
 
-    attr_reader :headers
-
     def auth_user
       @user ||= User.find(decoded_auth_token[:user_id]) if decoded_auth_token
-      @user || add_error('Invalid token') && nil
+      @user || add_error('Invalid token')
     end
 
     def add_error(message)
@@ -31,9 +29,6 @@ module Api
 
     def http_auth_header
       return headers['Authorization'].split(' ').last if headers['Authorization'].present?
-
-      add_error('Missing token')
-      nil
     end
   end
 end
