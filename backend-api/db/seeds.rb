@@ -22,8 +22,7 @@ menu_items.each do |item|
   a.description = item[:description]
   a.type = MenuItemFoodTypes[item[:type]]
   a.price = item[:price]
-
-  # url = "https://miro.medium.com/max/699/1*UfV5sxZUkgyUQIyZf8Wzjg.png"
+  
   url = item[:url]
   filename = File.basename(URI.parse(url).path)
   file = URI.open(url)
@@ -35,3 +34,14 @@ end
 ## Table
 a = Table.new
 a.save
+
+
+## Users
+users = [
+  { username: "user_one", role: UserRoleTypes["Chef"] },
+  { username: "user_two", role: UserRoleTypes["Barman"] },
+  { username: "user_three", role: UserRoleTypes["Waiter"] }
+]
+users.each do |user|
+  User.create!(username: user[:username], role: user[:role])
+end

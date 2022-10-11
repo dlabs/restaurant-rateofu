@@ -5,6 +5,15 @@ module Api
     before_action :set_table, only: %i[create]
     before_action :set_order, only: %i[show]
 
+    skip_before_action :authenticate_request, only: %i[create show]
+
+    def index
+      form = Forms::Orders::OrderSearchForm.new(order_search_form_params)
+      form.submit
+
+      render json: form.results, each_serializer: OrderSerializer
+    end
+
     def show
       render json: @order, serializer: OrderSerializer
     end
@@ -35,6 +44,10 @@ module Api
                       item_id
                       quantity
                     ]).require(:items)
+    end
+
+    def order_search_form_params
+      params.permit(:has_unfinished_items)
     end
   end
 end
