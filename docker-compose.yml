@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    container_name: api
+    env_file:
+      - server/.env
+
+  proxy:
+    image: nginx:1.23
+    build:
+      context: .
+      dockerfile: Dockerfile.proxy
+    container_name: proxy
+    ports:
+      - 80:80
+    depends_on:
+      - api
