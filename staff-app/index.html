@@ -3,35 +3,32 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
         <title>Restaurant at the End of the Universe - Staff</title>
     </head>
     <body>
-        <div class="container" id="app">
-            <div class="row">
-                <div class="col-sm-12">
-                    <h5>Restaurant at the End of the Universe - Staff</h5>
-                    <p>Don't panic and always carry a towel</p>
+        <div id="app">
+            <div class="bg-gray-100 py-2 px-8 mb-4">
+                <div class="flex flex-row my-6 content-center justify-between">
+                    <p class="font-semibold text-xl">The Restaurant at the End of the Universe</p>
+                    <p class="text-md">Don't panic and always carry a towel</p>
                 </div>
             </div>
-            <div class="row">
-                <router-view></router-view>
+            <div class="container mx-auto">
+              <router-view></router-view>
             </div>
         </div>
 
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+        <script src="https://cdn.tailwindcss.com"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
         <script src="https://unpkg.com/vue-router@3.0.0/dist/vue-router.js"></script>
 
         <script type="text/javascript">
-            const BASE_URL = 'http://localhost:8082/';
+            const BASE_URL = 'http://localhost/';
 
             axios.defaults.baseURL = BASE_URL;
 
-            const axiosClient = axios.default;
+            const axiosClient = axios.create();
 
             class Order {
                 constructor(orderId, tableId, orderItems) {
@@ -212,7 +209,7 @@
                 }
 
                 async update(orderItem) {
-                    let response = await axiosClient.put(`/api/order-items/${orderItem.orderItemId}`, orderItem);
+                    let response = await axiosClient.put(`/api/order-items/${orderItem.orderItemId}/${orderItem.itemId}`, { status: orderItem.status });
                 }
 
                 static appendMenuItem(orderItem, menuItemsMap) {
@@ -237,17 +234,22 @@
                     };
                 },
                 template: `
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon1">@</span>
+                    <div class="flex flex-row space-x-4 items-center justify-center mt-10">
+                        <div>
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Username</label>
+                            <input v-model="username" type="text" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" class="shadow appearance-none border rounded w-96 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                         </div>
-                        <input v-model="username" type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
-                        <select v-model="role" class="custom-select">
-                            <option value="chef">Chef</option>
-                            <option value="barman">Barman</option>
-                            <option value="waiter">Waiter</option>
-                        </select>
-                        <button v-bind:disabled="loggedIn" v-on:click="login()" class="form-control btn-primary">Login</button>
+                        <div>
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Role</label>
+                            <select v-model="role" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 cursor-pointer">
+                                <option value="chef">Chef</option>
+                                <option value="barman">Barman</option>
+                                <option value="waiter">Waiter</option>
+                            </select>
+                        </div>
+                        <div class="pt-6">
+                            <button v-bind:disabled="loggedIn" v-on:click="login()" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 border border-green-700 rounded">Login</button>
+                        </div>
                     </div>
                 `,
                 methods: {
@@ -283,21 +285,23 @@
                     setInterval(this.fetchUnfinishedOrders, 5000);
                 },
                 template: `
-                    <div class="w-100">
-                        <div class="col-sm-12">
-                            <h2>The kitchen</h2>
+                    <div>
+                        <div>
+                            <h2 class="my-4 text-xl font-semibold">The kitchen</h2>
                         </div>
-                        <div class="card w-100" v-if="orders" v-for="order in orders">
-                            <div class="card-header">
+                        <div v-if="orders" v-for="order in orders" class="mt-4 p-4 bg-gray-100 rounded">
+                            <div class="text-md font-semibold italic mb-4">
                                 Order in work ({{ order.orderId }})
                             </div>
-                            <div class="card-body">
-                                <ul id="stock" class="list-group list-group-flush">
-                                    <li v-for="orderItem in order.orderItems" class="list-group-item" v-if="orderItem.menuItem.itemType == 'food' && (orderItem.status === 'ordered' || orderItem.status === 'preparing')">
-                                        <p>{{ orderItem.menuItem.itemTitle }}</p>
+                            <div>
+                                <ul id="stock" class="space-y-4">
+                                    <li v-for="orderItem in order.orderItems" v-if="orderItem.menuItem.itemType == 'food' && (orderItem.status === 'ordered' || orderItem.status === 'preparing')">
+                                        <div class="flex flex-row space-x-4 items-center">
+                                            <button v-if="orderItem.status === 'ordered'" v-on:click="markItemAsPreparing(orderItem)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 border border-blue-700 rounded">Start preparing</button>
+                                            <button v-if="orderItem.status === 'preparing'" v-on:click="markItemAsReadyToServe(orderItem)" class="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 border border-green-700 rounded">Prepared!</button>
 
-                                        <button v-if="orderItem.status === 'ordered'" class="form-control btn-primary" v-on:click="markItemAsPreparing(orderItem)">Start preparing</button>
-                                        <button v-if="orderItem.status === 'preparing'" class="form-control btn-primary" v-on:click="markItemAsReadyToServe(orderItem)">Prepared!</button>
+                                            <p class="ml-8 titlecase">{{ orderItem.menuItem.itemTitle }}</p>
+                                        </div>
                                     </li>
                                 </ul>
                             </div>
@@ -348,21 +352,23 @@
                     setInterval(this.fetchUnfinishedOrders, 5000);
                 },
                 template: `
-                    <div class="w-100">
-                        <div class="col-sm-12">
-                            <h2>The bar</h2>
+                    <div>
+                        <div>
+                            <h2 class="my-4 text-xl font-semibold">The bar</h2>
                         </div>
-                        <div class="card w-100" v-if="orders" v-for="order in orders">
-                            <div class="card-header">
+                        <div v-if="orders" v-for="order in orders" class="mt-4 p-4 bg-gray-100 rounded">
+                            <div class="text-md font-semibold italic mb-4">
                                 Order in work ({{ order.orderId }})
                             </div>
-                            <div class="card-body">
-                                <ul id="stock" class="list-group list-group-flush">
-                                    <li v-for="orderItem in order.orderItems" class="list-group-item" v-if="orderItem.menuItem.itemType == 'drink' && (orderItem.status === 'ordered' || orderItem.status === 'preparing')">
-                                        <p>{{ orderItem.menuItem.itemTitle }}</p>
+                            <div>
+                                <ul id="stock" class="space-y-4">
+                                    <li v-for="orderItem in order.orderItems" v-if="orderItem.menuItem.itemType == 'drink' && (orderItem.status === 'ordered' || orderItem.status === 'preparing')">
+                                        <div class="flex flex-row space-x-4 items-center">
+                                            <button v-if="orderItem.status === 'ordered'" v-on:click="markItemAsPreparing(orderItem)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 border border-blue-700 rounded">Start preparing</button>
+                                            <button v-if="orderItem.status === 'preparing'" v-on:click="markItemAsReadyToServe(orderItem)" class="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 border border-green-700 rounded">Prepared!</button>
 
-                                        <button v-if="orderItem.status === 'ordered'" class="form-control btn-primary" v-on:click="markItemAsPreparing(orderItem)">Start preparing</button>
-                                        <button v-if="orderItem.status === 'preparing'" class="form-control btn-primary" v-on:click="markItemAsReadyToServe(orderItem)">Prepared!</button>
+                                            <p class="ml-8 titlecase">{{ orderItem.menuItem.itemTitle }}</p>
+                                        </div>
                                     </li>
                                 </ul>
                             </div>
@@ -413,20 +419,22 @@
                     setInterval(this.fetchUnfinishedOrders, 5000);
                 },
                 template: `
-                    <div class="w-100">
-                        <div class="col-sm-12">
-                            <h2>Waiter</h2>
+                    <div>
+                        <div>
+                            <h2 class="my-4 text-xl font-semibold">Waiter</h2>
                         </div>
-                        <div class="card w-100" v-if="orders" v-for="order in orders">
-                            <div class="card-header">
+                        <div v-if="orders" v-for="order in orders" class="mt-4 p-4 bg-gray-100 rounded">
+                            <div class="text-md font-semibold italic mb-4">
                                 Order in work ({{ order.orderId }})
                             </div>
-                            <div class="card-body">
-                                <ul id="stock" class="list-group list-group-flush">
-                                    <li v-for="orderItem in order.orderItems" class="list-group-item" v-if="orderItem.status === 'ready_to_serve'">
-                                        <p>{{ orderItem.menuItem.itemTitle }}</p>
+                            <div>
+                                <ul id="stock" class="space-y-4">
+                                    <li v-for="orderItem in order.orderItems" v-if="orderItem.status === 'ready_to_serve'">
+                                        <div class="flex flex-row space-x-4 items-center">
+                                            <button v-on:click="markItemAsDelivered(orderItem)" class="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 border border-green-700 rounded">Delivered</button>
 
-                                        <button class="form-control btn-primary" v-on:click="markItemAsDelivered(orderItem)">Delivered</button>
+                                            <p class="ml-8 titlecase">{{ orderItem.menuItem.itemTitle }}</p>
+                                        </div>
                                     </li>
                                 </ul>
                             </div>

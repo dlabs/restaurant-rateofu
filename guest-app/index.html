@@ -3,34 +3,31 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <title>Restaurant at the End of the Universe</title>
   </head>
   <body>
-    <div class="container" id="app">
-        <div class="row">
-            <div class="col-sm">
-                <h1>The Restaurant at the End of the Universe</h1>
-                <p><router-link to="/">So long, and thanks for all the fish!</router-link></p>
+    <div id="app">
+        <div class="bg-gray-100 py-2 px-8 mb-4">
+            <div class="flex flex-row my-6 content-center justify-between">
+                <p class="font-semibold text-2xl">The Restaurant at the End of the Universe</p>
+                <p class="text-md hover:underline text-sky-500"><router-link to="/">So long, and thanks for all the fish!</router-link></p>
             </div>
         </div>
-        <div class="row">
+        <div class="container mx-auto">
           <router-view></router-view>
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script src="https://unpkg.com/vue-router@3.0.0/dist/vue-router.js"></script>
     <script type="text/javascript">
-        const BASE_URL = 'http://localhost:8081/';
+        const BASE_URL = 'http://localhost/';
 
         axios.defaults.baseURL = BASE_URL;
 
-        const axiosClient = axios.default;
+        const axiosClient = axios.create();
 
         class MenuItemService {
 
@@ -152,18 +149,18 @@
             props: ['item'],
             data() {
                 return {
-                    qty: 0
+                    qty: 1
                 };
             },
             template: `
-                <div class="card w-50">
-                    <img class="card-img-top" v-bind:src="item.itemImage">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ item.itemTitle }}</h5>
-                        <div class="input-group">
-                            <input class="form-control" v-model="qty" type="number" min="0" max="10">
-                            <div class="input-group-append">
-                                <button v-on:click="add()" class="form-control btn-primary" type="button">Add</button>    
+                <div class="border rounded-md">
+                    <img v-bind:src="item.itemImage" class="rounded-t-md object-cover h-80 w-96">
+                    <div class="p-2">
+                        <h5 class="truncate text-center mb-4 mt-2 titlecase text-lg font-semibold">{{ item.itemTitle }}</h5>
+                        <div class="flex flex-row space-x-4 items-center justify-center">
+                            <input v-model="qty" type="number" class="rounded border p-2" min="1" max="10">
+                            <div>
+                                <button v-on:click="add()" type="button" class="bg-blue-400 border-blue-500 border hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-full lowercase">Add</button>
                             </div>
                         </div>
                     </div>
@@ -172,7 +169,7 @@
             methods: {
                 add() {
                     this.$emit('add', this.item, this.qty);
-                    this.qty = 0;
+                    this.qty = 1;
                 }
             }
         });
@@ -223,23 +220,27 @@
                 }
             },
             template: `
-            <div>
-                <div class="card-deck col-sm-12">
+            <div class="space-y-8">
+                <div class="grid grid-cols-4 gap-4">
                     <menu-item 
                         v-for="menuItem in menuItems" 
+                        v-bind:key="menuItem.itemId"
                         v-bind:item="menuItem"
                         v-on:add="addToCart"
                     >
                     </menu-item>
                 </div>
-                <hr>
-                <div class="col-sm-12 mt-l mb-l">
-                    <h2>Cart</h2>
+                <div class="space-y-2">
+                    <h2 class="text-xl">Cart</h2>
                     <ul>
-                        <li v-for="cartItem in cart">{{ cartItem.qty }} x {{ cartItem.menuItem.itemTitle }}</li>
+                        <li v-for="cartItem in cart" class="flex flex-col">
+                            <div class="pl-4">
+                                {{ cartItem.qty }} <span class="font-bold lowercase">x</span> <span class="titlecase">{{ cartItem.menuItem.itemTitle }}</span>
+                            </div>
+                        </li>
                     </ul>
-                    <button v-if="Object.keys(cart).length > 0" v-on:click="submit()" class="form-control btn-primary">Submit order</button>
-                    <p v-if="Object.keys(cart).length == 0">Your cart is empty.</p>
+                    <button v-if="Object.keys(cart).length > 0" v-on:click="submit()" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 border border-green-700 rounded">Submit order</button>
+                    <p v-if="Object.keys(cart).length == 0" class="text-gray-400">Your cart is empty.</p>
                 </div>
             </div>
             `
@@ -274,17 +275,19 @@
             },
             template: `
                 <div>
-                    <h2 v-if="order">Order #{{ order.orderId }}</h2>
+                    <h2 v-if="order" class="my-4 text-xl font-semibold italic">Order #{{ order.orderId }}</h2>
 
-                    <div class="card-deck" v-if="order">
-                        <div v-for="orderItem in order.orderItems" class="card">
-                            <img class="card-img-top" v-bind:src="orderItem.menuItem.itemImage">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ orderItem.menuItem.itemTitle }}</h5>
-                                <span class="badge badge-secondary" v-if="orderItem.status === 'ordered'">Ordered</span>
-                                <span class="badge badge-primary" v-if="orderItem.status === 'preparing'">Preparing</span>
-                                <span class="badge badge-warning" v-if="orderItem.status === 'ready_to_serve'">Ready to serve</span>
-                                <span class="badge badge-success" v-if="orderItem.status === 'delivered'">Delivered</span>
+                    <div v-if="order" class="grid grid-cols-4 gap-4">
+                        <div v-for="orderItem in order.orderItems" class="border rounded-md">
+                            <img v-bind:src="orderItem.menuItem.itemImage" class="rounded-t-md object-cover h-80 w-96">
+                            <div class="p-2 my-2 space-y-2">
+                                <h5 class="truncate text-center titlecase text-lg font-semibold">{{ orderItem.menuItem.itemTitle }}</h5>
+                                <div>
+                                    <span v-if="orderItem.status === 'ordered'" class="px-4 py-2 rounded-full text-gray-500 bg-gray-200 font-semibold text-sm lowercase">Ordered</span>
+                                    <span v-if="orderItem.status === 'preparing'" class="px-4 py-2 rounded-full text-blue-500 bg-blue-200 font-semibold text-sm lowercase">Preparing</span>
+                                    <span v-if="orderItem.status === 'ready_to_serve'" class="px-4 py-2 rounded-full text-orange-500 bg-orange-200 font-semibold text-sm lowercase">Ready to serve</span>
+                                    <span v-if="orderItem.status === 'delivered'" class="px-4 py-2 rounded-full text-green-500 bg-green-200 font-semibold text-sm lowercase">Delivered</span>
+                                </div>
                             </div>
                         </div>
                     </div>
