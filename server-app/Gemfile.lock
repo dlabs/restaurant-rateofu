@@ -84,6 +84,8 @@ GEM
       reline (>= 0.3.1)
     diff-lcs (1.5.0)
     erubi (1.11.0)
+    factory_bot (6.2.1)
+      activesupport (>= 5.0.0)
     globalid (1.0.0)
       activesupport (>= 5.0)
     i18n (1.12.0)
@@ -190,6 +192,7 @@ PLATFORMS
 DEPENDENCIES
   bootsnap
   debug
+  factory_bot (~> 6.2, >= 6.2.1)
   faker!
   jbuilder
   jwt
