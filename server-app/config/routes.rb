@@ -1,6 +1,12 @@
 Rails.application.routes.draw do
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  scope :api, defaults: { format: :json } do
+    post 'login', to: "sessions#new"
 
-  # Defines the root path route ("/")
-  # root "articles#index"
+    get "menu-items", to: "items#index"
+
+    get "orders", to: "orders#index"
+    post "orders", to: "orders#create"
+    get "orders/:id", to: "orders#show"
+    put "order-items/:id", to: "orders#update"
+  end
 end
