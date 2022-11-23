@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe "Orders", type: :request do
-  describe "GET /index" do
+  describe "GET /orders" do
     it "returns http success" do
       get "/api/orders"
       expect(response).to have_http_status(:success)
@@ -12,10 +12,23 @@ RSpec.describe "Orders", type: :request do
       get "/api/orders"
       expect(JSON.parse(response.body)).to eq([])
 
-      create(:order)
-      create(:order)
+      2.times { create(:order_item) }
       get "/api/orders"
       expect(JSON.parse(response.body).length).to eq(2)
+    end
+
+    describe "GET /orders?has_unfinished_items=true" do
+      it "returns only unfinished items" do
+        3.times { create(:order_item) }
+        order = OrderItem.last
+        order.status = OrderItem::Status::Delivered
+        order.save
+        get "/api/orders"
+        expect(JSON.parse(response.body).size).to eq(3)
+        get "/api/orders?has_unfinished_items=true"
+        expect(JSON.parse(response.body).size).to eq(2)
+
+      end
     end
   end
 
@@ -33,6 +46,7 @@ RSpec.describe "Orders", type: :request do
 
       expect(OrderItem.all.count).to eq(0)
       post "/api/orders", params: hsh
+      expect(response).to have_http_status(:created)
       expect(OrderItem.all.count).to eq(2)
       expect(OrderItem.all.map(&:quantity).sum).to eq(7)
     end

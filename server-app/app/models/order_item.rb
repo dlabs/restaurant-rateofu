@@ -1,5 +1,6 @@
 class OrderItem < ApplicationRecord
   belongs_to :order, dependent: :destroy
+  before_create :generate_uuid
 
   self.primary_key = "id"
 
@@ -7,6 +8,7 @@ class OrderItem < ApplicationRecord
     Ordered = "ordered"
     Preparing = "preparing"
     ReadyToServe = "ready_to_serve"
+    Delivered = "delivered"
   end
 
   def self.update(id, new_status)

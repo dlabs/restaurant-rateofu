@@ -1,6 +1,10 @@
 class OrdersController < ApplicationController
   def index
-    @orders = Order.all.limit(100)
+    if params["has_unfinished_items"] == "true"
+      @order_items = Order.only_unfinished_items
+    else
+      @order_items = Order.all_items
+    end
   end
 
   def create
