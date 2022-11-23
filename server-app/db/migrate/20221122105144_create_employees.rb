@@ -3,7 +3,6 @@ class CreateEmployees < ActiveRecord::Migration[7.0]
     create_table :employees do |t|
       t.string :username
       t.string :role
-      t.string :status
       t.timestamps
 
       t.index [:username, :role], unique: true
