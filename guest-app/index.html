@@ -224,7 +224,7 @@
                         };
                     });
 
-                    axios.post('/api/orders', {
+                    axiosClient.post('/api/orders', {
                         table_id: 'test-table',
                         items: itemsPayload
                     })

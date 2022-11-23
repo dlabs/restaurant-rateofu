@@ -96,9 +96,9 @@ RSpec.describe "Orders", type: :request do
 
       order_item_1 = OrderItem.first
       order_item_2 = OrderItem.second
-      put "/api/order-items/#{order_item_1.id}", params: { orderItemId: order_item_1.id, order: { status: OrderItem::Status::ReadyToServe }}
+      put "/api/order-items/#{order_item_1.id}", params: { orderItemId: order_item_1.id, status: OrderItem::Status::ReadyToServe }
       expect(OrderItem.all.map(&:status)).to match_array(["ready_to_serve", "ordered"])
-      put "/api/order-items/#{order_item_2.id}", params: { orderItemId: order_item_2.id, order: { status: OrderItem::Status::Preparing }}
+      put "/api/order-items/#{order_item_2.id}", params: { orderItemId: order_item_2.id, status: OrderItem::Status::Preparing }
       expect(OrderItem.all.map(&:status)).to match_array(["ready_to_serve", "preparing"])
     end
   end

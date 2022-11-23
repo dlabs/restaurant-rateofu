@@ -18,7 +18,7 @@ class OrdersController < ApplicationController
   end
 
   def update
-    new_status = params["order"]["status"]
+    new_status = params["status"]
     OrderItem.update(params["orderItemId"], new_status)
   end
 end

@@ -190,7 +190,7 @@
             static filterByUnfinishedItemType(orders, type) {
                 return orders.filter((order) => {
                     return order.orderItems.some((orderItem) => {
-                        return orderItem.menuItem.itemType == type && (orderItem.status == 'ordered' || orderItem.status == 'preparing');
+                        return orderItem.menuItem?.itemType == type && (orderItem.status == 'ordered' || orderItem.status == 'preparing');
                     });
                 });
             }
