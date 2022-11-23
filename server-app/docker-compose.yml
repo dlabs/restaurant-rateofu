@@ -4,7 +4,7 @@ services:
   server-app:
     build:
       context: .
-      dockerfile: 'Dockerfile.dev'
+      dockerfile: Dockerfile.dev
     ports:
       - 8080:8080
 
