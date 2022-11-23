@@ -1,36 +1,48 @@
 <!doctype html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <title>Restaurant at the End of the Universe</title>
-  </head>
-  <body>
+</head>
+
+<body>
     <div class="container" id="app">
         <div class="row">
             <div class="col-sm">
                 <h1>The Restaurant at the End of the Universe</h1>
-                <p><router-link to="/">So long, and thanks for all the fish!</router-link></p>
+                <p>
+                    <router-link to="/">So long, and thanks for all the fish!</router-link>
+                </p>
             </div>
         </div>
         <div class="row">
-          <router-view></router-view>
+            <router-view></router-view>
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script src="https://unpkg.com/vue-router@3.0.0/dist/vue-router.js"></script>
     <script type="text/javascript">
-        const BASE_URL = 'http://localhost:8081/';
+        const BASE_URL = 'http://localhost:8080/';
 
-        axios.defaults.baseURL = BASE_URL;
-
-        const axiosClient = axios.default;
+        const axiosClient = axios.create({
+            baseURL: BASE_URL,
+            headers: { 'Content-Type': 'application/json' }
+        });
 
         class MenuItemService {
 
@@ -74,7 +86,7 @@
 
             static fromData(data) {
                 let items = [];
-                
+
                 if ('order_items' in data) {
                     items = data['order_items'].map(OrderItem.fromData);
                 }
@@ -92,7 +104,7 @@
                 menuItems.forEach((menuItem) => {
                     menuItemsMap[menuItem.itemId] = menuItem;
                 });
-                
+
                 order.orderItems.forEach((orderItem) => {
                     orderItem.menuItem = menuItemsMap[orderItem.itemId];
                 });
@@ -163,11 +175,11 @@
                         <div class="input-group">
                             <input class="form-control" v-model="qty" type="number" min="0" max="10">
                             <div class="input-group-append">
-                                <button v-on:click="add()" class="form-control btn-primary" type="button">Add</button>    
+                                <button v-on:click="add()" class="form-control btn-primary" type="button">Add</button>
                             </div>
                         </div>
                     </div>
-                </div>    
+                </div>
             `,
             methods: {
                 add() {
@@ -199,12 +211,12 @@
                     return p;
                 },
                 addToCart(menuItem, qty) {
-                    let cartItem = this.cart[menuItem.itemId] || {menuItem: menuItem, qty: 0};
+                    let cartItem = this.cart[menuItem.itemId] || { menuItem: menuItem, qty: 0 };
                     cartItem.qty += parseInt(qty);
 
                     this.$set(this.cart, menuItem.itemId, cartItem);
                 },
-                submit () {
+                submit() {
                     let itemsPayload = Object.keys(this.cart).map((cartItemId) => {
                         return {
                             item_id: cartItemId,
@@ -216,17 +228,17 @@
                         table_id: 'test-table',
                         items: itemsPayload
                     })
-                    .then((response) => {
-                        let order = Order.fromData(response.data);
-                        this.$router.push({ path: `/order/${order.orderId}` });
-                    });
+                        .then((response) => {
+                            let order = Order.fromData(response.data);
+                            this.$router.push({ path: `/order/${order.orderId}` });
+                        });
                 }
             },
             template: `
             <div>
                 <div class="card-deck col-sm-12">
-                    <menu-item 
-                        v-for="menuItem in menuItems" 
+                    <menu-item
+                        v-for="menuItem in menuItems"
                         v-bind:item="menuItem"
                         v-on:add="addToCart"
                     >
@@ -257,9 +269,9 @@
                 menuItemService.fetchMenuItems().then((menuItems) => {
                     this.menuItems = menuItems;
                     this.loadOrder();
-                    
-                    setInterval(() => { 
-                        this.loadOrder(); 
+
+                    setInterval(() => {
+                        this.loadOrder();
                     }, 5000);
                 });
             },
@@ -304,5 +316,6 @@
             router
         });
     </script>
-  </body>
+</body>
+
 </html>
