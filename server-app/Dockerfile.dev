@@ -1,0 +1,7 @@
+FROM ruby:3.1.2-bullseye
+
+WORKDIR /server-app
+
+COPY Gemfile Gemfile
+COPY Gemfile.lock Gemfile.lock
+RUN bundle install

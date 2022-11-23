@@ -23,3 +23,6 @@ will start simple Python HTTP server on port 8082, therefore guest application s
 In order to connect frontend clients to a custom server, modify `guest-app/index.html` and `staff-app/index.html` files.
 
 Find a line starting with `const BASE_URL = "..."` , replace the value with your custom server base URL, and you should be ready to go.
+
+## Server Local setup
+open README file inside `server-app` directory
